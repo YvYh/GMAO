@@ -63,5 +63,45 @@ public class MaintenanceDAO {
 			}
 			return retour;
 			}
+		public List<Maintenance> getListeMaintenance() {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<Maintenance> retour = new ArrayList<Maintenance>();
+		
+		// connexion Ã  la base de donnÃ©es
+		try {
+	
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("SELECT * FROM maintenance");
+	
+			// on exÃ©cute la requÃªte
+			rs = ps.executeQuery();
+			// on parcourt les lignes du rÃ©sultat
+			while (rs.next())
+				retour.add(new Maintenance(rs.getInt("maint_id"), rs.getString("maint_num"), rs.getString("maint_type"), rs.getString("maint_duree"), rs.getInt("maint_etat"), rs.getInt("maint_idOp")));
+	
+		}catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			// fermeture du rs, du preparedStatement et de la connexion
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (Exception ignore) {
+			}
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (Exception ignore) {
+			}
+			try {
+				if (con != null)
+					con.close();
+			} catch (Exception ignore) {
+			}
+		}
+		return retour;
+	}
 }
 
