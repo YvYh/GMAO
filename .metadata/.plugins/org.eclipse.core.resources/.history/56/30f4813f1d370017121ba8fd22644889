@@ -1,0 +1,176 @@
+package app;
+
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class MenuResponsable extends JFrame implements ActionListener {
+	/**
+	 * windows of director menu
+	 */
+	
+	private static final long serialVersionUID = 1L;
+	private JPanel panel;//basic panel
+	private JPanel pBouton;//panel of buttons
+	private JPanel pMenuMacro;//panel of macro menu
+	private JPanel pGM;//panel "Gestion Maintenance"
+	private JLabel labNom;//label of user name
+	private JButton boutonGM;//Gestion Maintenance
+	private JButton boutonGD;//Gestion Devis
+	private JButton boutonGO;//Gestion Operateur
+	private JButton boutonGC;//Gestion Client
+	private JButton bReturn;//return button
+	private CardLayout card;
+	private GridLayout gridBouton;
+	int retour;
+	
+	public static void main(String[] args)
+	{
+		new MenuResponsable("YU", "Hong");
+	}
+
+	
+	public MenuResponsable(String nom, String prenom){
+		/**
+		 * construction of MenuResponsable
+		 * @nom @prenom user's name
+		 */
+		panel = new JPanel();	
+        pBouton = new JPanel();
+        pMenuMacro = new JPanel();
+        card = new CardLayout();
+        gridBouton = new GridLayout(4,1,0,10);
+        Color couleur1 = new Color(96,120,136);
+        labNom = new JLabel("Bienvenu"+nom+" "+prenom);
+        
+        pMenuMacro.setLayout(gridBouton);
+        pMenuMacro.setBackground(null);
+        pBouton.setLayout(card);
+        pBouton.setBackground(null);
+        panel.setLayout(new java.awt.GridLayout(2,1));
+        panel.setBackground(couleur1);
+
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setTitle("Responsable");
+        this.setSize(400,450);
+
+		//instantiation des composants graphique
+		
+        Color couleur2 = new Color(242,242,242);
+		pMenuMacro.setLayout(gridBouton);
+        pMenuMacro.setBackground(null);
+		boutonGM = new JButton("Gestion Maintenance");
+		boutonGM.setBackground(couleur2);
+		boutonGD = new JButton("Gestion Devis");
+		boutonGD.setBackground(couleur2);
+		boutonGO = new JButton("Gestion Operateur");
+		boutonGO.setBackground(couleur2);
+		boutonGC = new JButton("Gestion Client");
+		boutonGC.setBackground(couleur2);
+		
+		
+		pMenuMacro.add(boutonGM);
+		pMenuMacro.add(boutonGD);
+		pMenuMacro.add(boutonGO);
+		pMenuMacro.add(boutonGC);
+		
+		pBouton.add(pMenuMacro,"MenuMacro");
+		card.show(pBouton, "MenuMacro");
+		
+		panel.add(labNom);
+		panel.add(pBouton);
+	
+		
+		//add ActionListener to boutonGM
+		boutonGM.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//actionGM();
+				new InterfaceMaintenance();
+			}
+		});
+		
+		boutonGD.addActionListener(this);
+		boutonGO.addActionListener(this);
+		boutonGC.addActionListener(this);
+		
+		
+		//allow turn off the app when we close the window
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setContentPane(panel);
+		this.setVisible(true);
+	}
+	
+	
+	public JPanel actionMenuMacro(){
+		/**
+		 * show the panel of MenuMacro
+		 * @return the panel of MenuMacro 
+		 */
+		pMenuMacro = new JPanel();
+		Color couleur2 = new Color(242,242,242);
+		
+		pMenuMacro.setLayout(gridBouton);
+        pMenuMacro.setBackground(null);
+		boutonGM = new JButton("Gestion Maintenance");
+		boutonGM.setBackground(couleur2);
+		boutonGD = new JButton("Gestion Devis");
+		boutonGD.setBackground(couleur2);
+		boutonGO = new JButton("Gestion Operateur");
+		boutonGO.setBackground(couleur2);
+		boutonGC = new JButton("Gestion Client");
+		boutonGC.setBackground(couleur2);
+		
+		pMenuMacro.add(boutonGM);
+		pMenuMacro.add(boutonGD);
+		pMenuMacro.add(boutonGO);
+		pMenuMacro.add(boutonGC);
+		return pMenuMacro;
+		
+	}
+	
+	public void actionGM(){
+		/**
+		 * show the panel of GM
+		 */
+		pGM = new JPanel();
+		gridBouton = new GridLayout(5,1,0,15);
+		JLabel labGM = new JLabel("Gestion Maintenance");
+		JButton bAjouter = new JButton("Ajouter");
+		JButton bModifier = new JButton("Modifier");
+		JButton bValider = new JButton("Valider");
+		bReturn = new JButton("Return");
+		
+		pGM.setLayout(gridBouton);
+		pGM.setBackground(null);
+		pGM.add(labGM);
+		pGM.add(bAjouter);
+		pGM.add(bModifier);
+		pGM.add(bValider);
+		pGM.add(bReturn);
+		
+		pBouton.add(pGM, "GM");
+		card.show(pBouton, "GM");
+		
+		//action of the return button
+		bReturn.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				card.show(pBouton, "MenuMacro");
+		    }
+		});		
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+}

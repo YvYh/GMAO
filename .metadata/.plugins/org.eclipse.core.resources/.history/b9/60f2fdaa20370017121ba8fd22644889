@@ -1,0 +1,105 @@
+package app;
+
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class InterfaceGO extends JFrame{
+	private static final long serialVersionUID = 1L;
+	private JTabbedPane tabbed;
+	private CardLayout card = new CardLayout();
+	private JPanel panel;
+	
+	
+	public InterfaceGO(int etat){
+		this.getContentPane().setLayout(card);
+		this.getContentPane().add("panelR", panelR());
+		this.getContentPane().add("panelO", panelO());
+		if (etat==1)
+		{
+			card.show(this.getContentPane(), "panelR");
+		}else
+		{
+			card.show(this.getContentPane(), "panelO");
+		}
+		this.setTitle("Opérateur");
+        this.setSize(400,450);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
+		
+	}
+	
+	public JPanel panelR()
+	{
+		panel = new JPanel();
+		tabbed = new JTabbedPane();
+		tabbed.addTab("Saisir", saisirO());
+		tabbed.addTab("surcôut",surcout());
+		tabbed.addTab("Consultation", consultation());
+		panel.add(tabbed);
+		return panel;
+		
+	}
+	
+	public JPanel panelO()
+	{
+		panel = new JPanel();
+		return panel;
+	}
+	
+	public JPanel saisirO()
+	{
+		panel = new JPanel();
+		
+		JLabel labNom = new JLabel("Nom:");
+		JTextField textNom = new JTextField(10);
+		JLabel labPrenom = new JLabel("Prenom:");
+		JTextField textPrenom = new JTextField(10);
+		JPanel pNom = new JPanel();
+		pNom.add(labNom);
+		pNom.add(textNom);
+		pNom.add(labPrenom);
+		pNom.add(textPrenom);
+		
+		JLabel labMot = new JLabel("Mot de passe:");
+		JTextField textMot = new JTextField(20);
+		JPanel pMot = new JPanel();
+		pMot.add(labMot);
+		pMot.add(textMot);
+		
+		JLabel labAdresse = new JLabel("Adresse:");
+		JTextField textAdresse = new JTextField(20);
+		JLabel labTel = new JLabel("Tel:");
+		JTextField textTel = new JTextField(15);
+		JPanel pAT = new JPanel();
+		pAT.add(labAdresse);
+		pAT.add(textAdresse);
+		pAT.add(labTel);
+		pAT.add(textTel);
+		
+		panel.add(pNom);
+		panel.add(pMot);
+		panel.add(pAT);
+		return panel;
+	}
+	
+	public JPanel surcout()
+	{
+		panel = new JPanel();
+		return panel;
+	}
+	
+	public JPanel consultation()
+	{
+		panel = new JPanel();
+		return panel;
+	}
+
+}

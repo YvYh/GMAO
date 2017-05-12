@@ -1,0 +1,78 @@
+package app;
+
+
+public class Maintenance {
+	private int idEnt;
+	private String cMaint;
+	private String type;
+	private String duree;
+	private boolean etat;
+	
+	public Maintenance(int idEnt, String nMaint, String type, String duree)
+	{
+		this.idEnt = idEnt;
+		this.cMaint = nMaint;
+		this.type = type;
+		this.duree = duree;
+		etat = false;
+	}
+	
+	public Maintenance(int idEnt, String nMaint, String type, String duree, boolean etat)
+	{
+		this.idEnt = idEnt;
+		this.cMaint = nMaint;
+		this.type = type;
+		this.duree = duree;
+		this.etat = etat;
+	}
+	
+	public int getId()
+	{
+		return idEnt;
+	}
+	
+	public void setId(int idEnt)
+	{
+		this.idEnt = idEnt;
+	}
+	public String getnMaint()
+	{
+		return cMaint;
+	}
+	
+	public void setnMaint(String nMaint)
+	{
+		this.cMaint = nMaint;
+	}
+	
+	public String getType()
+	{
+		return type;
+	}
+	
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+	
+	public String getduree()
+	{
+		return duree;
+	}
+	
+	public void setduree(String duree)
+	{
+		this.duree = duree;
+	}
+	
+	public boolean getEtat()
+	{
+		return etat;
+	}
+	
+	public void validerMaint()
+	{
+		etat = true;
+	}
+
+}

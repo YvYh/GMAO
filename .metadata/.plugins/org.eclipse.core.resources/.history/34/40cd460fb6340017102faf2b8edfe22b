@@ -1,0 +1,127 @@
+package app;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+
+public class InterfaceMaintenance extends JFrame {
+	/**
+	 * interface of Gestion Maintenance 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JTabbedPane tabbed;
+	private JButton bC;//create maintenance
+	private JButton bA;//show  maintenance
+	private JButton bV;//validate maintenance
+	private JPanel panel;//basic panel
+	private JPanel pRef;//panel of reference
+	private JLabel labRef;
+	private JTextField textRef;
+	private JPanel pC;//panel of content
+	private JLabel labC;
+	private JTextArea textC;
+	private JPanel pType;//panel of type
+	private JLabel labType;
+	private JRadioButton type1;
+	private JRadioButton type2;
+	private JRadioButton type3;
+	private JPanel pDuree;//panel of duration
+	private JLabel labD;
+	private JLabel labJour;
+	private JTextField textD;
+	private JPanel pBouton;//panel of button
+	private JButton bR;//return button
+	private JButton bOK;//validation button
+	
+	public static void main(String[] args)
+	{
+		new InterfaceMaintenance();
+	}
+	
+	public InterfaceMaintenance(){
+		/**
+		 * construction of maintenance's interface
+		 */
+		
+		tabbed = new JTabbedPane();
+		tabbed.addTab("Saisir", saisirM());
+		tabbed.addTab("Afficher", null);
+		tabbed.addTab("Modifier", null);
+		tabbed.addTab("Valider", null);
+		this.getContentPane().add(tabbed,BorderLayout.CENTER);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setTitle("Maintenance");
+        this.setSize(500,450);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
+	}
+	
+	public Component saisirM(){
+		panel = new JPanel();
+		panel.setLayout(new java.awt.GridLayout(5,1));
+		
+		labRef = new JLabel("Réf:");
+		textRef = new JTextField(15);
+		pRef = new JPanel();
+		pRef.add(labRef);
+		pRef.add(textRef);
+		
+		labC = new JLabel("Contenu");
+		textC = new JTextArea(5,15);
+		pC = new JPanel();
+		pC.add(labC);
+		pC.add(textC);
+		
+		labType = new JLabel("Type");
+		type1 = new JRadioButton("T1");
+		type2 = new JRadioButton("T2");
+		type3 = new JRadioButton("T3");
+        ButtonGroup group = new ButtonGroup();
+        pType = new JPanel();
+        group.add(type1);
+        group.add(type2);
+        group.add(type3);
+        pType.add(labType);
+        pType.add(type1);
+        pType.add(type2);
+        pType.add(type3);
+        
+        labD = new JLabel("Durée:");
+        textD = new JTextField(15);
+        labJour = new JLabel("jour(s)");
+        pDuree = new JPanel();
+        pDuree.add(labD);
+        pDuree.add(textD);
+        pDuree.add(labJour);
+        
+        bR= new JButton("Retour");
+        bOK = new JButton("OK");
+        pBouton = new JPanel();
+        pBouton.add(bR);
+        pBouton.add(bOK);
+        
+        panel.add(pRef);
+        panel.add(pC);
+        panel.add(pType);
+        panel.add(pDuree);
+        panel.add(pBouton);
+        
+        return panel;
+        
+	}
+	
+	
+
+}

@@ -1,0 +1,44 @@
+package app;
+
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+
+public class InterfaceAuthentification extends JFrame{
+	private JLabel labID = new JLabel("Identifiant::");
+	private JTextField textID;
+	private JLabel labPasse = new JLabel("Mot de passe:");
+	private JPasswordField motPasse;
+	private JButton bConnecter;
+	
+	public InterfaceAuthentification(){
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.getContentPane().setLayout(new java.awt.FlowLayout());
+        
+        textID = new JTextField(15);
+        motPasse = new JPasswordField(15);
+        motPasse.setEchoChar('*');
+        bConnecter = new JButton("Se Connecter");
+        
+        
+        this.getContentPane().add(labID);
+        this.getContentPane().add(textID);
+        this.getContentPane().add(labPasse);
+        this.getContentPane().add(motPasse);
+        this.getContentPane().add(bConnecter);
+        
+        this.setSize(200,200);
+        this.setVisible(true);
+	}
+	
+	public static void main(String[] args)
+	{
+		new InterfaceAuthentification();
+	}
+	
+	
+	
+}

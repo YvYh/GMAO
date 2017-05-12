@@ -1,0 +1,94 @@
+package app;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class MenuResponsable extends JFrame implements ActionListener {
+	
+	private static final long serialVersionUID = 1L;
+	private JPanel panel;
+	private JPanel pBouton;
+	private JPanel pBlanc1 = new JPanel();
+	private JPanel pBlanc2 = new JPanel();
+	private JLabel labNom;
+	private JButton boutonGM;//Gestion Maintenance
+	private JButton boutonGD;//Gestion Devis
+	private JButton boutonGO;//Gestion Operateur
+	private JButton boutonGC;//Gestion Client
+	private JButton boutonReturn;
+	
+	public MenuResponsable(String nom, String prenom){
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		panel = new JPanel();	
+        panel.setLayout(new java.awt.BorderLayout(20, 300));
+        pBouton = new JPanel();
+        pBouton.setLayout(new java.awt.FlowLayout());
+        pBouton.setBackground(null);
+        pBlanc1.setBackground(null);
+        pBlanc2.setBackground(null);
+        pBlanc1.setSize(100, 100);
+        //pBlanc2.setSize(100, 100);
+        this.setTitle("Responsable");
+        this.setSize(600,500);
+        
+        Color couleur1 = new Color(96,120,136);
+		panel.setBackground(couleur1);
+		
+		//instantiation des composants graphique
+		labNom = new JLabel("Bienvenu"+nom+" "+prenom);
+		Color couleur2 = new Color(242,242,242);
+		boutonGM = new JButton("Gestion Maintenance");
+		boutonGM.setBackground(couleur2);
+		boutonGD = new JButton("Gestion Devis");
+		boutonGD.setBackground(couleur2);
+		boutonGO = new JButton("Gestion Operateur");
+		boutonGO.setBackground(couleur2);
+		boutonGC = new JButton("Gestion Client");
+		boutonGC.setBackground(couleur2);
+		boutonReturn = new JButton("Return");
+		boutonReturn.setBackground(couleur2);
+		
+		panel.add(labNom,BorderLayout.NORTH);
+		pBouton.add(boutonGM);
+		pBouton.add(boutonGD);
+		pBouton.add(boutonGO);
+		pBouton.add(boutonGC);
+		panel.add(pBouton,BorderLayout.CENTER);
+		panel.add(pBlanc1,BorderLayout.EAST);
+		//panel.add(pBlanc2,BorderLayout.WEST);
+		panel.add(boutonReturn,BorderLayout.SOUTH);
+		
+		//ajouter des ecouteurs sur les boutons pour gerer les evenements
+		boutonGM.addActionListener(this);
+		boutonGD.addActionListener(this);
+		boutonGO.addActionListener(this);
+		boutonGC.addActionListener(this);
+		boutonReturn.addActionListener(this);
+		
+		//permet de quitter l'app si on ferme la fenetre
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		this.setContentPane(panel);
+		
+		this.setVisible(true);
+	}
+	
+	public static void main(String[] args)
+	{
+		new MenuResponsable("YU", "Hong");
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

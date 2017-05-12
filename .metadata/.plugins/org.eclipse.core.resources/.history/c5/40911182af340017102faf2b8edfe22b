@@ -1,0 +1,64 @@
+package app;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
+
+public class InterfaceMaintenance extends JFrame {
+	/**
+	 * interface of Gestion Maintenance 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JToolBar toolbar;
+	private JButton bC;//create maintenance
+	private JButton bA;//show  maintenance
+	private JButton bV;//validate maintenance
+	private JPanel panel;//basic panel
+	private GridLayout 
+	private JPanel pRef;//panel of reference
+	private JLabel labRef;
+	private JTextField textRef;
+	private JPanel pC;//panel of content
+	private JLabel labC;
+	private JTextArea textC;
+	private JPanel pType;//panel of type
+	private JLabel labType;
+	private JRadioButton type1;
+	private JRadioButton type2;
+	private JRadioButton type3;
+	private JPanel pDuree;//panel of duration
+	private JLabel labD;
+	private JLabel labJour;
+	private JTextField textD;
+	private JPanel pBouton;//panel of button
+	private JButton bR;//return button
+	private JButton bOK;//validation button
+	
+	public static void main(String[] args)
+	{
+		new InterfaceMaintenance();
+	}
+	
+	public InterfaceMaintenance(){
+		/**
+		 * construction of maintenance's interface
+		 */
+		toolbar = new JToolBar();
+		bC = new JButton("Créer");
+		bA = new JButton("Afficher");
+		bV = new JButton("Valider");
+		panel = new JPanel();
+		panel.setLayout(new java.awt.GridLayout(5,1));
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setTitle("Maintenance");
+        this.setSize(400,450);
+	}
+	
+	
+
+}

@@ -1,0 +1,26 @@
+package app;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JTabbedPane;
+
+public interface InterfaceGO {
+	private JTabbedPane tabbed;
+
+	/**
+	 * construction of maintenance interface
+	 */
+	public class InterfaceGO extends JFrame{
+		
+	}
+	tabbed = new JTabbedPane();
+	tabbed.addTab("Saisir", saisirM());
+	tabbed.addTab("Afficher", afficherM());
+	tabbed.addTab("Modifier", chercherM());
+	tabbed.addTab("Valider", validerM());
+	this.getContentPane().add(tabbed,BorderLayout.CENTER);
+	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    this.setTitle("Maintenance");
+    this.setSize(500,450);
+	this.setVisible(true);
+}

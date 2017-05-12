@@ -1,0 +1,47 @@
+package app;
+
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class InterfaceGO extends JFrame{
+	private static final long serialVersionUID = 1L;
+	private JTabbedPane tabbed;
+	private CardLayout card = new CardLayout();
+	private JPanel panel;
+	private JPanel panel1= new JPanel();//basic panel for responsible
+	private JPanel panel2 = new JPanel();
+	private JLabel labRef;
+	private JTextField textRef;
+	
+	
+	public InterfaceGO(int etat){
+		this.getContentPane().setLayout(card);
+		this.getContentPane().add("panelR", panelR());
+		this.setTitle("Opérateur");
+        this.setSize(400,450);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
+		
+	}
+	
+	public JPanel panelR()
+	{
+		panel = new JPanel();
+		
+	}
+	
+	public JPanel panelO()
+	{
+		panel = new JPanel
+	}
+
+}
