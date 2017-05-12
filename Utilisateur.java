@@ -1,14 +1,22 @@
 package app;
 
 public class Utilisateur {
- private String nom;
- private String prenom;
- private String motDePasse;
- private int etat;//Responsable=1, operateur=2; client=3
- private int id;//numero d'identification
+  String nom;
+  String prenom;
+  String motDePasse;
+  int etat;//Responsable=1, operateur=2; client=3
+  String id;//numero d'identification
  
+ public Utilisateur()
+ {
+	 nom="";
+	 prenom="";
+	 motDePasse="";
+	 etat=0;
+	 id="";
+ }
  
- public Utilisateur(String nom, String prenom, String motDePasse, int etat, int id)
+  public Utilisateur(String nom, String prenom, String motDePasse, int etat, String id)
  {
 	 this.nom=nom;
 	 this.prenom=prenom;
@@ -17,7 +25,7 @@ public class Utilisateur {
 	 this.id=id;
  }
  
- public int getID()
+ public String getID()
  {
 	 return id;
  }
@@ -40,6 +48,10 @@ public class Utilisateur {
  public String getMotDePasse()
  {
 	 return motDePasse;
+ }
+ 
+ public void setEtat(int i){
+	 this.etat=i;
  }
  
  
