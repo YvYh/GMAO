@@ -5,7 +5,7 @@ public class Utilisateur {
   String prenom;
   String motDePasse;
   int etat;//Responsable=1, operateur=2; client=3
-  int id;//numero d'identification
+  String id;//numero d'identification
  
  public Utilisateur()
  {
@@ -13,10 +13,10 @@ public class Utilisateur {
 	 prenom="";
 	 motDePasse="";
 	 etat=0;
-	 id=0;
+	 id="";
  }
  
-  public Utilisateur(String nom, String prenom, String motDePasse, int etat, int id)
+  public Utilisateur(String nom, String prenom, String motDePasse, int etat, String id)
  {
 	 this.nom=nom;
 	 this.prenom=prenom;
@@ -25,7 +25,7 @@ public class Utilisateur {
 	 this.id=id;
  }
  
- public int getID()
+ public String getID()
  {
 	 return id;
  }

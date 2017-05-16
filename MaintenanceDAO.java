@@ -31,7 +31,7 @@ public class MaintenanceDAO {
 			ps.setString(2, maintenance.getcMaint());
 			ps.setString(3, maintenance.getType());
 			ps.setString(4, maintenance.getduree());
-			ps.setBoolean(5, maintenance.getEtat());
+			ps.setInt(5, maintenance.getEtat());
 			ps.setInt(6, maintenance.getidOp());
 			retour = ps.executeUpdate();
 		} catch (Exception e) {
@@ -54,7 +54,7 @@ public class MaintenanceDAO {
 			ps.setInt(1, idMaint);
 			rs = ps.executeQuery();
 			if (rs.next())
-				retour = new Maintenance(rs.getInt("maint_id"), rs.getInt("maint_idEnt"), rs.getString("maint_num"), rs.getString("maint_type"), rs.getString("maint_duree"), rs.getBoolean("maint_etat"), rs.getInt("maint_idOp"));
+				retour = new Maintenance(rs.getInt("maint_id"), rs.getInt("maint_idEnt"), rs.getString("maint_num"), rs.getString("maint_type"), rs.getString("maint_duree"), rs.getInt("maint_etat"), rs.getInt("maint_idOp"));
 			} catch (Exception ee) {
 			ee.printStackTrace();
 			} 

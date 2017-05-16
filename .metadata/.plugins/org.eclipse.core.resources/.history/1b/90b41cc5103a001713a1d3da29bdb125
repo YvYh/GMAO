@@ -6,7 +6,7 @@ public class Operateur extends Utilisateur {
 	private String adresse;
 	private String tel;
 	private ArrayList<Maintenance> listM;
-	public Operateur(String nom, String prenom, String motDePasse,String adresse, String tel,int id)
+	public Operateur(String nom, String prenom, String motDePasse,String adresse, String tel,String id)
 	{
 		super(nom, prenom, motDePasse, 2,id );
 		this.setAdresse(adresse);

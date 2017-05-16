@@ -8,14 +8,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -126,7 +123,6 @@ public class InterfaceGO extends JFrame{
 						textTel.getText(),
 						id);
 				//OperateurDAO
-				//
 				labResultat.setText("Operateur "+o.nom+" est enrégistré");
 			}
 		});
@@ -138,57 +134,17 @@ public class InterfaceGO extends JFrame{
 	{
 		JPanel panel = new JPanel();
 		//monquer Devis
-		//
 		return panel;
 	}
 	
 	public JPanel consultation()
 	{
-		JPanel p = new JPanel();
-		p.setLayout(new BorderLayout());
-		JButton consulter = new JButton("COnsulter");
-		JLabel lab = new JLabel();
-		
-
-		ArrayList<Maintenance> mList = new ArrayList<Maintenance>();
-		ArrayList<Maintenance> mList2 = new ArrayList<Maintenance>();
+		JPanel panel = new JPanel();
 		MaintenanceDAO mDAO = new MaintenanceDAO();
-		mList2.addAll(mDAO.getListeMaintenance());
-		for (int i=0; i<mList2.size();i++)
-		{
-			if (mList2.get(i).getidOp()!=0)
-				mList.add(mList2.get(i));
-		}
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		JList listM = new JList(mList.toArray());
-
-		listM.setVisibleRowCount(10);
-		listM.setBorder(BorderFactory.createTitledBorder("Les maintenance sans validation"));
-
-		ArrayList<Operateur> oList = new ArrayList<Operateur>();
-		OperateurDAO oDAo = new OperateurDAO();
-		oList.addAll(oDAO.getLisateOperateur());
-		JList listO new JList(oList.toArray());
-		listO.setVisibleRowCount(10);
-		listO.setBorder(BorderFactory.createTitledBorder("Les opérateur disponible"));
+		List<Maintenance> listM = new ArrayList<Maintenance>();
+		JTabel table = new JTabel();
 		
-		p.add(new JScrollPane(listM), BorderLayout.WEST);
-		p.add(new JScrollPane(listO), BorderLayout.EAST);
-		p.add(consulter, BorderLayout.SOUTH);
-		p.add(lab, BorderLayout.PAGE_END);
-		
-		
-		
-		
-		consulter.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent evt){
-				mList2.get(listM.getSelectedIndex()).setidOp(oList.get(listO.getSelectedIndex()).getID());
-				lab.setText(oList.get(listO.getSelectedIndex()).getNom()+""+oList.get(listO.getSelectedIndex()).getPrenom()+
-						"->Maintenance Réf:"+mList2.get(listM.getSelectedIndex()).getRef());
-		    }
-		});
-		return p;
-
+		return panel;
 	}
 
 }

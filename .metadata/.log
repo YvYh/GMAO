@@ -149,3 +149,8 @@ Contains: The project description file (.project) for 'APP-GMAO' is missing.  Th
 !MESSAGE Errors occurred while refreshing resources with the local file system.
 !SUBENTRY 2 org.eclipse.core.resources 4 567 2017-05-16 09:43:21.206
 !MESSAGE The project description file (.project) for 'APP-GMAO' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+
+!ENTRY org.eclipse.core.resources 2 2 2017-05-16 09:50:48.023
+!MESSAGE Save operation warnings.
+!SUBENTRY 1 org.eclipse.core.resources 2 234 2017-05-16 09:50:48.023
+!MESSAGE The project description file (.project) for 'APP-GMAO' was missing.  This file contains important information about the project.  A new project description file has been created, but some information about the project may have been lost.

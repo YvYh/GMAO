@@ -29,7 +29,7 @@ public class UtilisateurDAO {
 			ps.setString(2, utilisateur.getPrenom());
 			ps.setString(3, utilisateur.getMotDePasse());
 			ps.setInt(4, utilisateur.getEtat());
-			ps.setInt(5, utilisateur.getID());
+			ps.setString(5, utilisateur.getID());
 			retour = ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,7 +51,7 @@ public class UtilisateurDAO {
 			ps.setInt(1, idUtil);
 			rs = ps.executeQuery();
 			if (rs.next())
-				retour = new Utilisateur(rs.getString("util_nom"), rs.getString("util_prenom"), rs.getString("util_mdp"), rs.getInt("util_etat"), rs.getInt("util_id"));
+				retour = new Utilisateur(rs.getString("util_nom"), rs.getString("util_prenom"), rs.getString("util_mdp"), rs.getInt("util_etat"), rs.getString("util_id"));
 			} 
 		catch (Exception ee) {
 			ee.printStackTrace();

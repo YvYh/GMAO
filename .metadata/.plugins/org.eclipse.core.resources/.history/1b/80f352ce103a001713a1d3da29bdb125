@@ -43,7 +43,7 @@ public class AuthentificationDAO {
 						rs.getString("uti_prenom"),
 						rs.getString("uti_mot"),
 						rs.getInt("uti_etat"),
-						rs.getInt("uti_id"));
+						rs.getString("uti_id"));
 			
 			if (motDePasse.equals(u.getMotDePasse())==false)
 				u=null;
