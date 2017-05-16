@@ -95,6 +95,12 @@ public class MenuResponsable extends JFrame implements ActionListener {
 			}
 		});
 		
+		boutonGO.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				new InterfaceGO(1);
+			}
+		});
+		
 		boutonGD.addActionListener(this);
 		boutonGO.addActionListener(this);
 		boutonGC.addActionListener(this);

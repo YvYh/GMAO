@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MaintenanceDAO {
 	final static String URL = "jdbc:oracle:thin:@localhost:1521:xe";
@@ -63,7 +65,8 @@ public class MaintenanceDAO {
 			}
 			return retour;
 			}
-		public List<Maintenance> getListeMaintenance() {
+	
+	public List<Maintenance> getListeMaintenance() {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -79,7 +82,7 @@ public class MaintenanceDAO {
 			rs = ps.executeQuery();
 			// on parcourt les lignes du rÃ©sultat
 			while (rs.next())
-				retour.add(new Maintenance(rs.getInt("maint_id"), rs.getString("maint_num"), rs.getString("maint_type"), rs.getString("maint_duree"), rs.getInt("maint_etat"), rs.getInt("maint_idOp")));
+				retour.add(new Maintenance(rs.getInt("maint_id"), rs.getString("maint_num"), rs.getString("maint_type"), rs.getString("maint_duree")));
 	
 		}catch (Exception ee) {
 			ee.printStackTrace();
@@ -103,5 +106,6 @@ public class MaintenanceDAO {
 		}
 		return retour;
 	}
+
 }
 

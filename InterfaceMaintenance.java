@@ -5,6 +5,8 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -18,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 
 
 public class InterfaceMaintenance extends JFrame {
@@ -49,15 +52,16 @@ public class InterfaceMaintenance extends JFrame {
 	private JButton bCher;
 	private CardLayout cardlay;
 	private Maintenance m;
+	private MaintenanceDAO mDAO;
 	
-	/*public static void main(String[] args)
+	public static void main(String[] args)
 	{
 		new InterfaceMaintenance();
-	}*/
+	}
 	
 	public InterfaceMaintenance(){
 		/**
-		 * construction of maintenance's interface
+		 * construction of maintenance interface
 		 */
 		
 		tabbed = new JTabbedPane();
@@ -66,13 +70,16 @@ public class InterfaceMaintenance extends JFrame {
 		tabbed.addTab("Modifier", chercherM());
 		tabbed.addTab("Valider", validerM());
 		this.getContentPane().add(tabbed,BorderLayout.CENTER);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Maintenance");
         this.setSize(500,450);
 		this.setVisible(true);
 	}
 	
 	public Component saisirM(){
+		/**
+		 * panel of inputting a maintenance
+		 */
 		panel = new JPanel();
 		panel.setLayout(new java.awt.GridLayout(6,1));
 		
@@ -124,7 +131,7 @@ public class InterfaceMaintenance extends JFrame {
         panel.add(pBouton);
         panel.add(labResultat);
         
-        //validate this maintenance
+        //finish the input
         bOK.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
 				String type;
@@ -138,6 +145,8 @@ public class InterfaceMaintenance extends JFrame {
 				}else
 					type=null;
 				m = new Maintenance(Integer.parseInt(textRef.getText()),textC.getText(),type,textD.getText());
+				mDAO = new MaintenanceDAO();
+				mDAO.ajouter(m);
 				//System.out.println(m.getnMaint()+m.getType()+m.getduree());
 				labResultat.setText("Enregisté!");
 		    }
@@ -146,9 +155,15 @@ public class InterfaceMaintenance extends JFrame {
        return panel;        
 	}
 	
-	public Component maintenance(Maintenance m){
+	public JPanel maintenance(Maintenance m){
+		/**
+		 * panel of showing a maintenance
+		 * @param m maintenance target
+		 */
 		panel = new JPanel();
 		panel.setLayout(new java.awt.GridLayout(6,1));
+		
+		
 		
 		labRef = new JLabel("Réf:");
 		textRef = new JTextField(Integer.toString(m.getId()));
@@ -186,6 +201,10 @@ public class InterfaceMaintenance extends JFrame {
 	}
 	
 	public Component chercherM(){
+		/**
+		 * panel of researching a maintenance
+		 * @return panel
+		 */
 		panel = new JPanel();
 		panel.setLayout(new java.awt.GridLayout(6,1));
 		
@@ -198,42 +217,63 @@ public class InterfaceMaintenance extends JFrame {
 		bCher = new JButton("Chercher");
 		panel.add(pRef);
 		panel.add(bCher);
+		
 		return panel;
 	}
 	
+	
+	
 	public Component afficherM(){
+		/**
+		 * panel of showing a maintenance
+		 */
 		JPanel p = new JPanel();
 		cardlay = new CardLayout();
 		p.setLayout(cardlay);
 		p.add(chercherM(), "chercher");
 		cardlay.show(p, "chercher");
-		Maintenance m = new Maintenance(123,"abcdef","T2","23");
-	    p.add(maintenance(m),"M");
+		//Maintenance m = new Maintenance(123,"abcdef","T2","23");
+		mDAO = new MaintenanceDAO();
+		m = new Maintenance();
 		
-		
+		//action of "chercher" button
 		bCher.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
-				System.out.println("yes");
+				mDAO = new MaintenanceDAO();
+				m = mDAO.getMaintenance(Integer.parseInt(textRef.getText()));
+				p.add(maintenance(m),"M");
 				cardlay.show(p, "M");
 			}
 		});
-		
 		return p;
 		
 	}
 	
 	public JPanel validerM(){
 		JPanel p = new JPanel();
-		String[] s={"Ref1234","Ref2345","Ref3467"};
-		JList list = new JList(s);
+		ArrayList<Maintenance> mList = new ArrayList<Maintenance>();
+		//ListModel mList = (ListModel) new ArrayList();
+		//import tous les maintenances
+		MaintenanceDAO mDAO = new MaintenanceDAO();
+		mList.addAll(mDAO.getListeMaintenance());
+		JLabel lab = new JLabel();
+		
+		//String[] s={"Ref1234","Ref2345","Ref3467"};
+		JList list = new JList(mList.toArray());
 		bOK = new JButton("Valider");
 		p.setLayout(new BorderLayout());
 		list.setVisibleRowCount(10);
 		list.setBorder(BorderFactory.createTitledBorder("Les maintenance sans validation"));
 		//list.addListSelectionListener(this);
 		p.add(new JScrollPane(list), BorderLayout.CENTER);
+		p.add(lab,BorderLayout.PAGE_END);
 		p.add(bOK, BorderLayout.PAGE_END);
-		
+		bOK.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				mList.get(list.getSelectedIndex()).validerMaint();
+				lab.setText(mList.get(list.getSelectedIndex()).getId()+"validé");
+		    }
+		});
 		return p;
 
 	}

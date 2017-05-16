@@ -32,6 +32,16 @@ public class Maintenance {
 		etat=false;
 	}
 	
+	public Maintenance() {
+		this.idEnt=0;
+		this.ref=0;
+		this.cMaint=null;
+		this.type=null;
+		this.duree=null;
+		this.etat=false;
+		this.idOp=0;
+	}
+
 	public int getId()
 	{
 		return idEnt;

@@ -24,7 +24,7 @@ public class AuthentificationDAO {
 		}
 	}
 	
-	public static Utilisateur Connecter(String id, String motDePasse){
+	public Utilisateur Connecter(String id, String motDePasse){
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
