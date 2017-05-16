@@ -24,7 +24,7 @@ public class AuthentificationDAO {
 		}
 	}
 	
-	public Utilisateur Connecter(int id, String motDePasse){
+	public Utilisateur Connecter(String id, String motDePasse){
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -35,7 +35,7 @@ public class AuthentificationDAO {
 
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
 			ps = con.prepareStatement("SELECT * FROM utilisateur_uti WHERE uti_id = ?");
-			ps.setInt(1, id);
+			ps.setString(1, id);
 			rs = ps.executeQuery();
 			// passe à la première (et unique) ligne retournée
 			if (rs.next())
