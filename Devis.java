@@ -8,6 +8,7 @@ public class Devis {
 	private float cout;
 	private ArrayList<Float> surcoutP;
 	private ArrayList<String> surcoutRM;
+	private int etat;
 
 	public Devis(int id, int idM, float cout) {
 		this.id = id;
@@ -15,6 +16,7 @@ public class Devis {
 		this.cout = cout;
 		this.surcoutP = new ArrayList<Float>();
 		this.surcoutRM = new ArrayList<String>();
+		this.etat = 0;
 	}
 	public int getId() {
 		return id;
