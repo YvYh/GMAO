@@ -9,7 +9,13 @@ public class Devis {
 	private ArrayList<Float> surcoutP;
 	private ArrayList<String> surcoutRM;
 
-	
+	public Devis(int id, int idM, float cout) {
+		this.id = id;
+		this.idM = idM;
+		this.cout = cout;
+		this.surcoutP = new ArrayList<Float>();
+		this.surcoutRM = new ArrayList<String>();
+	}
 	public int getId() {
 		return id;
 	}
@@ -39,6 +45,38 @@ public class Devis {
 	}
 	public void setSurcoutP(ArrayList<Float> surcoutP) {
 		this.surcoutP = surcoutP;
+	}
+	
+	public float sizeSurcoutP() {
+		return surcoutP.size();
+	}
+	
+	public float sizeSurcoutRM() {
+		return surcoutRM.size();
+	}
+	
+	public float getThisSurcoutP(int i) {
+		return surcoutP.get(i);
+	}
+	
+	public void addThisSurcoutP(float p) {
+		surcoutP.add(p);
+	}
+	
+	public void setThisSurcoutP(int i, float p) {
+		surcoutP.set(i, p);
+	}
+	
+	public String getThisSurcoutRM(int i) {
+		return surcoutRM.get(i);
+	}
+	
+	public void addThisSurcoutRM(String rm) {
+		surcoutRM.add(rm);
+	}
+	
+	public void setThisSurcoutRM(int i, String rm) {
+		surcoutRM.set(i, rm);
 	}
 
 }
