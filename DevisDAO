@@ -23,10 +23,11 @@ public class DevisDAO {
 		int retour = 0;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("INSERT INTO devis (devis_id, maint_ref, devis_cout) VALUES (?, ?, ?)");
+			ps = con.prepareStatement("INSERT INTO devis (devis_id, maint_ref, devis_cout, devis_etat) VALUES (?, ?, ?, ?)");
 			ps.setInt(1, devis.getId());
 			ps.setInt(2, devis.getIdM());
 			ps.setFloat(3, devis.getCout());
+			ps.setInt(4, devis.getEtat());
 			for(int i=1; i<devis.sizeSurcoutP() +1; i++) {
 				ps = con.prepareStatement("INSERT INTO surcout (devis_id, surcout_p, surcout_rm) VALUES (?, ?, ?)");
 				ps.setInt(1, devis.getId());
@@ -60,7 +61,7 @@ public class DevisDAO {
 			pss.setInt(1, id);
 			rss = pss.executeQuery();
 			if (rs.next()) {
-				retour = new Devis(rs.getInt("devis_id"), rs.getInt("maint_ref"), rs.getInt("devis_cout"));
+				retour = new Devis(rs.getInt("devis_id"), rs.getInt("maint_ref"), rs.getInt("devis_cout"), rs.getInt("devis_etat"));
 				while (rss.next()) {
 				retour.addThisSurcoutP(rss.getFloat("surcout_p"));
 				retour.addThisSurcoutRM(rss.getString("surcout_rm"));
