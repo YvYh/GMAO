@@ -80,5 +80,13 @@ public class Devis {
 	public void setThisSurcoutRM(int i, String rm) {
 		surcoutRM.set(i, rm);
 	}
+	
+	public void validerDevis() {
+		this.etat = 1;
+	}
+	
+	public int getEtat() {
+		return etat;
+	}
 
 }
