@@ -14,6 +14,11 @@ public class Operateur extends Utilisateur {
 		
 	}
 
+
+	public Operateur(String nom, String prenom, String mdp, int etat, int id) {
+		super(nom, prenom, mdp, etat,id );
+	}
+
 	public String getTel() {
 		return tel;
 	}

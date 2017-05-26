@@ -61,7 +61,7 @@ public class InterfaceAuthentification extends JFrame{ //implements ActionListen
 				Utilisateur u = new Utilisateur();//the return valuer of Authentiication.Connecter
 				try {
 					if (ae.getSource() == bConnecter) {
-					    u = aDAO.Connecter(textID.getText(), String.valueOf(textMot.getPassword()));
+						u = aDAO.Connecter(textID.getText(), String.valueOf(textMot.getPassword()));
 						System.out.print(u.getEtat());
 						if (u.getEtat() > 0)//password is right
 						{

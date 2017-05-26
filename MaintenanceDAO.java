@@ -26,13 +26,14 @@ public class MaintenanceDAO {
 		int retour = 0;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("INSERT INTO maintenance (maint_idEnt, maint_cont, maint_type, maint_duree, maint_etat, maint_idOp) VALUES (?, ?, ?, ?, ?, ?)");
-			ps.setInt(1, maintenance.getId());
+			ps = con.prepareStatement("INSERT INTO maintenance (maint_id, maint_cont, maint_type, maint_duree, maint_etat, maint_idOp, maint_idEnt) VALUES (?, ?, ?, ?, ?, ?, ?)");
+			ps.setString(1, maintenance.getRef());
 			ps.setString(2, maintenance.getcMaint());
 			ps.setString(3, maintenance.getType());
 			ps.setString(4, maintenance.getduree());
 			ps.setInt(5, maintenance.getEtat());
 			ps.setInt(6, maintenance.getidOp());
+			ps.setInt(7, maintenance.getId());
 			retour = ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -43,7 +44,7 @@ public class MaintenanceDAO {
 		return retour;
 	}
 
-	public Maintenance getMaintenance(int idMaint) {
+	public Maintenance getMaintenance(String string) {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -51,10 +52,10 @@ public class MaintenanceDAO {
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
 			ps = con.prepareStatement("SELECT * FROM maintenance WHERE maint_id = ?");
-			ps.setInt(1, idMaint);
+			ps.setString(1, string);
 			rs = ps.executeQuery();
 			if (rs.next())
-				retour = new Maintenance(rs.getInt("maint_id"), rs.getInt("maint_idEnt"), rs.getString("maint_num"), rs.getString("maint_type"), rs.getString("maint_duree"), rs.getInt("maint_etat"), rs.getInt("maint_idOp"));
+				retour = new Maintenance(rs.getString("maint_id"), rs.getString("maint_cont"), rs.getString("maint_type"), rs.getString("maint_duree"));
 			} catch (Exception ee) {
 			ee.printStackTrace();
 			} 
@@ -82,7 +83,7 @@ public class MaintenanceDAO {
 			rs = ps.executeQuery();
 			// on parcourt les lignes du rÃ©sultat
 			while (rs.next())
-				retour.add(new Maintenance(rs.getInt("maint_id"), rs.getString("maint_num"), rs.getString("maint_type"), rs.getString("maint_duree")));
+				retour.add(new Maintenance(rs.getString("maint_id"), rs.getString("maint_cont"), rs.getString("maint_type"), rs.getString("maint_duree")));
 	
 		}catch (Exception ee) {
 			ee.printStackTrace();

@@ -91,7 +91,7 @@ public class MenuResponsable extends JFrame implements ActionListener {
 		boutonGM.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
 				//actionGM();
-				new InterfaceMaintenance();
+				new InterfaceGM();
 			}
 		});
 		
@@ -101,7 +101,12 @@ public class MenuResponsable extends JFrame implements ActionListener {
 			}
 		});
 		
-		boutonGD.addActionListener(this);
+		boutonGD.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				new InterfaceGD();
+			}
+		});
+		
 		boutonGC.addActionListener(this);
 		
 		

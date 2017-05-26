@@ -3,14 +3,14 @@ package app;
 
 public class Maintenance {
 	private int idEnt;
-	private int ref;
+	private String ref;
 	private String cMaint;
 	private String type;
 	private String duree;
 	private boolean etat;
 	private int idOp;
 	
-	public Maintenance(int ref, int idEnt, String nMaint, String type, String duree, int etat, int idOp)
+	public Maintenance(String ref, int idEnt, String nMaint, String type, String duree, int etat, int idOp)
 	{
 		this.ref=ref;
 		this.idEnt = idEnt;
@@ -25,7 +25,7 @@ public class Maintenance {
 		this.idOp=idOp;
 	}
 	
-	public Maintenance(int ref, String nMaint, String type, String duree)
+	public Maintenance(String ref, String nMaint, String type, String duree)
 	{
 		this.ref=ref;
 		this.cMaint = nMaint;
@@ -38,7 +38,7 @@ public class Maintenance {
 	
 	public Maintenance() {
 		this.idEnt=0;
-		this.ref=0;
+		this.ref=null;
 		this.cMaint=null;
 		this.type=null;
 		this.duree=null;
@@ -108,11 +108,11 @@ public class Maintenance {
 		this.idOp=idOp;
 	}
 
-	public int getRef() {
+	public String getRef() {
 		return ref;
 	}
 
-	public void setRef(int ref) {
+	public void setRef(String ref) {
 		this.ref = ref;
 	}
 

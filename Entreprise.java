@@ -2,11 +2,11 @@ package app;
 
 public class Entreprise extends Utilisateur {
 	private String nom;
-	private String nSiret;
+	private int nSiret;
 	private String adresse;
 	private String ape;
 	
-	public Entreprise(String nom, String nSiret, String adresse, String ape,String motDePasse)
+	public Entreprise(String nom, int nSiret, String adresse, String ape,String motDePasse)
 	{
 		super(nom,"",motDePasse, 3, nSiret);
 		this.adresse = adresse;
@@ -17,7 +17,7 @@ public class Entreprise extends Utilisateur {
 	{
 		super();
 		this.nom ="";
-		this.nSiret = "";
+		this.nSiret = 0;
 		this.adresse = "";
 		this.ape = "";
 	}
@@ -32,12 +32,12 @@ public class Entreprise extends Utilisateur {
 		this.nom = nom;
 	}
 	
-	public String getnSiret()
+	public int getnSiret()
 	{
 		return nSiret;
 	}
 	
-	public void setnSiret(String nSiret)
+	public void setnSiret(int nSiret)
 	{
 		this.nSiret = nSiret;
 	}

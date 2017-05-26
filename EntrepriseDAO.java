@@ -29,7 +29,7 @@ public class EntrepriseDAO {
 			ps.setString(1, entreprise.getNom());
 			ps.setString(2, entreprise.getApe());
 			ps.setString(3, entreprise.getAdresse());
-			ps.setString(4, entreprise.getnSiret());
+			ps.setInt(4, entreprise.getnSiret());
 			retour = ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,7 +51,7 @@ public class EntrepriseDAO {
 			ps.setInt(1, idEnt);
 			rs = ps.executeQuery();
 			if (rs.next())
-				retour = new Entreprise(rs.getString("ent_nom"), rs.getString("ent_nSiret"), rs.getString("ent_adresse"),rs.getString("ent_ape"),rs.getString("ent_mtp"));
+				retour = new Entreprise(rs.getString("ent_nom"), rs.getInt("ent_nSiret"), rs.getString("ent_adresse"),rs.getString("ent_ape"),rs.getString("ent_mtp"));
 			} 
 		catch (Exception ee) {
 			ee.printStackTrace();

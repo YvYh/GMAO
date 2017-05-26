@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -19,6 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class InterfaceGO extends JFrame{
 	private static final long serialVersionUID = 1L;
@@ -47,6 +50,10 @@ public class InterfaceGO extends JFrame{
 		
 	}
 	
+	/**
+	 * menu pour la version de responsable
+	 * @return panel
+	 */
 	public JPanel panelR()
 	{
 		JPanel panel = new JPanel();
@@ -60,8 +67,13 @@ public class InterfaceGO extends JFrame{
 		
 	}
 	
+	/**
+	 * menu pour la version d'operateur
+	 * @return panel
+	 */
 	public JPanel panelO()
 	{
+		//version pour operateur
 		JPanel panel = new JPanel();
 		tabbed = new JTabbedPane();
 		panel.setLayout(new BorderLayout());
@@ -118,7 +130,7 @@ public class InterfaceGO extends JFrame{
 		bOK.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e)
 			{
-				String id = ("12345");
+				int id = 12345;
 				Operateur o = new Operateur(textNom.getText(),
 						textPrenom.getText(),
 						textMot.getText(),
@@ -136,59 +148,50 @@ public class InterfaceGO extends JFrame{
 	
 	public JPanel surcout()
 	{
+		JPanel p = new JPanel();
+		CardLayout card = new CardLayout();
+		p.setLayout(card);
+		
 		JPanel panel = new JPanel();
-		//monquer Devis
-		//
+		panel.setLayout(new GridLayout(2,2));
+		JLabel labRef = new JLabel("Ref:");
+		JTextField textRef = new JTextField(15);
+		JButton bCher = new JButton("Chercher");
+		panel.add(labRef);
+		panel.add(textRef);
+		panel.add(bCher);
+		p.add(panel, "chercher");
+		card.show(p, "chercher");
+		
+		bCher.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				DevisDAO dDAO = new DevisDAO();
+				Devis d = dDAO.getDevis(Integer.parseInt(textRef.getText()));
+				p.add(InterfaceGD,"D");
+				card.show(p, "D");
+			}
+		});
+		
 		return panel;
 	}
 	
 	public JPanel consultation()
 	{
 		JPanel p = new JPanel();
-		p.setLayout(new BorderLayout());
-		JButton consulter = new JButton("COnsulter");
+		ArrayList<Operateur> oList = new ArrayList<Operateur>();
+		OperateurDAO oDAO = new OperateurDAO();
+		oList.addAll(oDAO.getListeMaintenance());
 		JLabel lab = new JLabel();
 		
-
-		ArrayList<Maintenance> mList = new ArrayList<Maintenance>();
-		ArrayList<Maintenance> mList2 = new ArrayList<Maintenance>();
-		MaintenanceDAO mDAO = new MaintenanceDAO();
-		mList2.addAll(mDAO.getListeMaintenance());
-		for (int i=0; i<mList2.size();i++)
-		{
-			if (mList2.get(i).getidOp()!=0)
-				mList.add(mList2.get(i));
-		}
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		JList listM = new JList(mList.toArray());
-
-		listM.setVisibleRowCount(10);
-		listM.setBorder(BorderFactory.createTitledBorder("Les maintenance sans validation"));
-
-		ArrayList<Operateur> oList = new ArrayList<Operateur>();
-		OperateurDAO oDAo = new OperateurDAO();
-		oList.addAll(oDAO.getLisateOperateur());
-		JList listO new JList(oList.toArray());
-		listO.setVisibleRowCount(10);
-		listO.setBorder(BorderFactory.createTitledBorder("Les opérateur disponible"));
+		@SuppressWarnings("unchecked")
+		JList list = new JList(oList.toArray());
+		p.setLayout(new BorderLayout());
+		list.setVisibleRowCount(10);
+		list.setBorder(BorderFactory.createTitledBorder("Les operateur"));
+		p.add(new JScrollPane(list), BorderLayout.CENTER);
+		p.add(lab,BorderLayout.PAGE_END);
 		
-		p.add(new JScrollPane(listM), BorderLayout.WEST);
-		p.add(new JScrollPane(listO), BorderLayout.EAST);
-		p.add(consulter, BorderLayout.SOUTH);
-		p.add(lab, BorderLayout.PAGE_END);
-		
-		
-		
-		
-		consulter.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent evt){
-				mList2.get(listM.getSelectedIndex()).setidOp(oList.get(listO.getSelectedIndex()).getID());
-				lab.setText(oList.get(listO.getSelectedIndex()).getNom()+""+oList.get(listO.getSelectedIndex()).getPrenom()+
-						"->Maintenance Réf:"+mList2.get(listM.getSelectedIndex()).getRef());
-		    }
-		});
 		return p;
-
 	}
 
 }
