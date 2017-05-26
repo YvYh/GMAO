@@ -8,7 +8,7 @@ public class Entreprise extends Utilisateur {
 	
 	public Entreprise(String nom, int nSiret, String adresse, String ape,String motDePasse)
 	{
-		super(nom,"",motDePasse, 3, nSiret);
+		super(nom,null,motDePasse, 3, nSiret);
 		this.adresse = adresse;
 		this.ape = ape;
 	}

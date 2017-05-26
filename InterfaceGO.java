@@ -6,22 +6,18 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 public class InterfaceGO extends JFrame{
 	private static final long serialVersionUID = 1L;
@@ -61,7 +57,7 @@ public class InterfaceGO extends JFrame{
 		panel.setLayout(new BorderLayout());
 		tabbed.addTab("Saisir", saisirO());
 		tabbed.addTab("surcôut",surcout());
-		tabbed.addTab("Consultation", consultation());
+		//tabbed.addTab("Consultation", consultation());
 		panel.add(tabbed,BorderLayout.CENTER);
 		return panel;
 		
@@ -78,11 +74,15 @@ public class InterfaceGO extends JFrame{
 		tabbed = new JTabbedPane();
 		panel.setLayout(new BorderLayout());
 		tabbed.add("surcout", surcout());
-		tabbed.addTab("Cconsultation", consultation());
+		//tabbed.addTab("Cconsultation", consultation());
 		panel.add(tabbed,BorderLayout.CENTER);
 		return panel;
 	}
 	
+	/**
+	 * fonction permet de creer le panel pour ajouter un operateur
+	 * @return panel de saisir
+	 */
 	public JPanel saisirO()
 	{
 		JPanel panel = new JPanel();
@@ -137,53 +137,113 @@ public class InterfaceGO extends JFrame{
 						textAdresse.getText(),
 						textTel.getText(),
 						id);
-				//OperateurDAO
-				//
-				labResultat.setText("Operateur "+o.nom+" est enrégistré");
+				OperateurDAO oDAO = new OperateurDAO();
+				int resultat = oDAO.ajouter(o);
+				if (resultat != 0)
+					labResultat.setText("Operateur "+o.nom+" est enrégistré");
+				else
+					labResultat.setText("Probleme d'enregistrer");
+				
 			}
 		});
 		
 		return panel;
 	}
 	
-	public JPanel surcout()
-	{
+	public JComponent surcout(){
+		int niveau = 1;
 		JPanel p = new JPanel();
-		CardLayout card = new CardLayout();
-		p.setLayout(card);
+		Devis d = new Devis();
+		DevisDAO dDAO = new DevisDAO();
 		
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(2,2));
-		JLabel labRef = new JLabel("Ref:");
-		JTextField textRef = new JTextField(15);
-		JButton bCher = new JButton("Chercher");
-		panel.add(labRef);
-		panel.add(textRef);
-		panel.add(bCher);
-		p.add(panel, "chercher");
-		card.show(p, "chercher");
-		
-		bCher.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent evt){
-				DevisDAO dDAO = new DevisDAO();
-				Devis d = dDAO.getDevis(Integer.parseInt(textRef.getText()));
-				p.add(InterfaceGD,"D");
-				card.show(p, "D");
+		//while(niveau != 0)
+		{
+			switch(niveau)
+			{
+			case 1://panel pour chercher un devis existe
+			{
+				JPanel panelC = new JPanel();
+			    panelC.setLayout(new GridLayout(2,2));
+			    JLabel labRef = new JLabel("Ref:");
+			    JTextField textRef = new JTextField(15);
+			    JButton bCher = new JButton("Chercher");
+			    JLabel resultat = new JLabel();
+			    panelC.add(labRef);
+			    panelC.add(textRef);
+			    panelC.add(bCher);
+			    panelC.add(resultat);
+			    if (bCher.isSelected())
+			    {
+					d = dDAO.getDevis(Integer.parseInt(textRef.getText()));
+					if (d.getId() ==0)
+					{
+						resultat.setText("Ce devis n'existe pas");
+						panelC.revalidate();
+					}
+					else
+						niveau =2;
+			    }
+			    panelC.setVisible(true);
+			    p.add(panelC);
+			    p.revalidate();
+			    p.repaint();
+			    break;
 			}
-		});
+			
+			case 2://detailler le surcout
+			{
+				JPanel pS = new JPanel();
+				JLabel labP = new JLabel("Prix:");
+				JTextField textP = new JTextField(10);
+				JLabel labRM = new JLabel("Remarque:");
+				JTextArea textRM = new JTextArea();
+				JButton bAjouter = new JButton("Ajouter");
+				JButton bReturn = new JButton("Return");
+				pS.add(labP);
+				pS.add(textP);
+				pS.add(labRM);
+				pS.add(textRM);
+				pS.add(bAjouter);
+				pS.add(bReturn);
+				p.removeAll();
+				p.add(pS);
+				p.revalidate();
+			    p.repaint();
+			    if (bAjouter.isSelected())
+			    {
+			    	d.surcoutP.add(Float.valueOf(textP.getText()));
+			    	d.surcoutRM.add(textRM.getText());
+			    	dDAO.updateDevis(d);
+			    	niveau = 3;
+			    }
+			    if (bReturn.isSelected())
+			    {
+			    	niveau = 1;
+			    	d = new Devis();
+			    }
+			    break;
+			}
+			
+			case 3:
+				JLabel lab = new JLabel("Devis N."+d.getId()+"est renouvele");
+				niveau = 1;
+				d = new Devis();
+		    }
+		}
+		return p;
 		
-		return panel;
 	}
 	
-	public JPanel consultation()
+	
+	/*public JPanel consultation()
 	{
 		JPanel p = new JPanel();
 		ArrayList<Operateur> oList = new ArrayList<Operateur>();
 		OperateurDAO oDAO = new OperateurDAO();
-		oList.addAll(oDAO.getListeMaintenance());
+		oList.addAll(oDAO.getListeOperateur());
 		JLabel lab = new JLabel();
 		
-		@SuppressWarnings("unchecked")
+
 		JList list = new JList(oList.toArray());
 		p.setLayout(new BorderLayout());
 		list.setVisibleRowCount(10);
@@ -192,6 +252,6 @@ public class InterfaceGO extends JFrame{
 		p.add(lab,BorderLayout.PAGE_END);
 		
 		return p;
-	}
+	}*/
 
 }

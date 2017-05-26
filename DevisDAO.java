@@ -1,4 +1,5 @@
 package app;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -62,7 +63,7 @@ public class DevisDAO {
 			pss.setInt(1, id);
 			rss = pss.executeQuery();
 			if (rs.next()) {
-				retour = new Devis(rs.getInt("devis_id"), rs.getInt("maint_ref"), rs.getFloat("devis_cout"), rs.getInt("devis_etat"));
+				retour = new Devis(rs.getInt("devis_id"), rs.getInt("maint_ref"), rs.getInt("devis_cout"));
 				while (rss.next()) {
 				retour.addThisSurcoutP(rss.getFloat("surcout_p"));
 				retour.addThisSurcoutRM(rss.getString("surcout_rm"));
@@ -81,4 +82,10 @@ public class DevisDAO {
 			}
 			return retour;
 			}
+
+	public void updateDevis(Devis d) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

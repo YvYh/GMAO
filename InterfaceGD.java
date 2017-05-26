@@ -66,7 +66,7 @@ public class InterfaceGD extends JFrame {
 		bCher.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
 				MaintenanceDAO mDAO = new MaintenanceDAO();
-				Maintenance m = mDAO.getMaintenance(textRef.getText());
+				Maintenance m = mDAO.getMaintenance(Integer.parseInt( textRef.getText()));
 				JPanel p1 = new JPanel();
 				JLabel labRef = new JLabel("Ref:");
 				JTextField textRef = new JTextField(10);
@@ -151,4 +151,5 @@ public JPanel Devis(Devis d, Maintenance m){
 	p.add(textCout);
 	
 	return p;
+}
 }

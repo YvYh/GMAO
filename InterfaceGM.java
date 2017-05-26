@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -147,7 +148,7 @@ public class InterfaceGM extends JFrame {
 				}else
 					type=null;
 				
-				Maintenance m = new Maintenance(textRef.getText(),textC.getText(),type,textD.getText());
+				Maintenance m = new Maintenance(Integer.parseInt(textRef.getText()),textC.getText(),type,textD.getText());
 				System.out.println(textRef.getText());
 				System.out.println(m.getcMaint()+m.getType()+m.getduree());
 				MaintenanceDAO mDAO = new MaintenanceDAO();
@@ -167,7 +168,7 @@ public class InterfaceGM extends JFrame {
 		panel = new JPanel();
 		panel.setLayout(new java.awt.GridLayout(6,1));
 		
-		labRef = new JLabel("RÃ©f:");
+		labRef = new JLabel("R¨¦f:");
 		textRef = new JTextField(Integer.toString(m.getId()));
 		pRef = new JPanel();
 		pRef.add(labRef);
@@ -186,7 +187,7 @@ public class InterfaceGM extends JFrame {
         pType.add(labType);
         pType.add(textType);
         
-        labD = new JLabel("DurÃ©e:");
+        labD = new JLabel("Dur¨¦e:");
         textD = new JTextField(m.getduree());
         labJour = new JLabel("jour(s)");
         pDuree = new JPanel();
@@ -212,7 +213,7 @@ public class InterfaceGM extends JFrame {
 		panel = new JPanel();
 		panel.setLayout(new java.awt.GridLayout(6,1));
 		
-		labRef = new JLabel("RÃ©f:");
+		labRef = new JLabel("R¨¦f:");
 		textRef = new JTextField(15);
 		pRef = new JPanel();
 		pRef.add(labRef);
@@ -244,7 +245,7 @@ public class InterfaceGM extends JFrame {
 		bCher.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
 				mDAO = new MaintenanceDAO();
-				m = mDAO.getMaintenance(textRef.getText());
+				m = mDAO.getMaintenance(Integer.parseInt(textRef.getText()));
 				p.add(maintenance(m),"M");
 				cardlay.show(p, "M");
 			}
@@ -253,7 +254,7 @@ public class InterfaceGM extends JFrame {
 		
 	}
 	
-	@SuppressWarnings({ "unchecked", "unchecked", "unchecked" })
+
 	public Component modifierM(){
 		JPanel p = new JPanel();
 		cardlay = new CardLayout();
@@ -267,11 +268,11 @@ public class InterfaceGM extends JFrame {
 		//action of "chercher" button
 		bCher.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
-				m = mDAO.getMaintenance(textRef.getText());
+				m = mDAO.getMaintenance(Integer.parseInt(textRef.getText()));
 				JPanel pM = new JPanel();
 				pM.setLayout(new java.awt.GridLayout(6,1));
 				
-				labRef = new JLabel("RÃ©f:"+m.getId());
+				labRef = new JLabel("R¨¦f:"+m.getId());
 				
 				labC = new JLabel("Contenu");
 				textC = new JTextArea(m.getcMaint());
@@ -293,7 +294,7 @@ public class InterfaceGM extends JFrame {
 		        pType.add(type2);
 		        pType.add(type3);
 		        
-		        labD = new JLabel("DurÃ©e:");
+		        labD = new JLabel("Dur¨¦e:");
 		        textD = new JTextField(m.getduree());
 		        labJour = new JLabel("jour(s)");
 		        pDuree = new JPanel();
@@ -327,10 +328,10 @@ public class InterfaceGM extends JFrame {
 							type="T3";
 						}else
 							type=null;
-						m = new Maintenance(textRef.getText(),textC.getText(),type,textD.getText());
+						m = new Maintenance(Integer.parseInt(textRef.getText()),textC.getText(),type,textD.getText());
 						mDAO = new MaintenanceDAO();
 						mDAO.ajouter(m);
-						labResultat.setText("EnregistÃ©!");
+						labResultat.setText("Enregist¨¦!");
 					}
 				});
 			}
@@ -357,7 +358,7 @@ public class InterfaceGM extends JFrame {
 			public void valueChanged(ListSelectionEvent e) {
 				JDialog dialog = new JDialog(InterfaceGM.this,"Maintenance",true);
 				dialog.setContentPane(maintenance(mList.get(list.getSelectedIndex())));
-		        dialog.setBounds(300,300,200,200);
+		        dialog.setBounds(500,500,300,300);
 		        dialog.setVisible(true);
 			}
 		});
@@ -367,7 +368,7 @@ public class InterfaceGM extends JFrame {
 		bOK.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
 				mList.get(list.getSelectedIndex()).validerMaint();
-				lab.setText(mList.get(list.getSelectedIndex()).getId()+"validÃ©");
+				lab.setText(mList.get(list.getSelectedIndex()).getId()+"valid¨¦");
 		    }
 		});
 		return p;
@@ -402,7 +403,7 @@ public class InterfaceGM extends JFrame {
 		oList.addAll(oDAO.getLisateOperateur());
 		JList listO new JList(oList.toArray());
 		listO.setVisibleRowCount(10);
-		listO.setBorder(BorderFactory.createTitledBorder("Les opÃ©rateur disponible"));
+		listO.setBorder(BorderFactory.createTitledBorder("Les op¨¦rateur disponible"));
 		
 		p.add(new JScrollPane(listM), BorderLayout.WEST);
 		p.add(new JScrollPane(listO), BorderLayout.EAST);
@@ -414,7 +415,7 @@ public class InterfaceGM extends JFrame {
 			public void actionPerformed(ActionEvent evt){
 				mList2.get(listM.getSelectedIndex()).setidOp(oList.get(listO.getSelectedIndex()).getID());
 				lab.setText(oList.get(listO.getSelectedIndex()).getNom()+""+oList.get(listO.getSelectedIndex()).getPrenom()+
-						"->Maintenance RÃ©f:"+mList2.get(listM.getSelectedIndex()).getRef());
+						"->Maintenance R¨¦f:"+mList2.get(listM.getSelectedIndex()).getRef());
 		    }
 		});
 		return p;

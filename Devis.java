@@ -5,10 +5,9 @@ import java.util.ArrayList;
 public class Devis {
 	private int id;
 	private int idM;
-	private Maintenance m;
 	private float cout;
-	private ArrayList<Float> surcoutP;
-	private ArrayList<String> surcoutRM;
+	public ArrayList<Float> surcoutP;
+	public ArrayList<String> surcoutRM;
 	private int etat;
 
 	public Devis(int id, int idM, float cout) {
@@ -17,16 +16,13 @@ public class Devis {
 		this.cout = cout;
 		this.surcoutP = new ArrayList<Float>();
 		this.surcoutRM = new ArrayList<String>();
-		this.setEtat(0);
+		this.etat = 0;
 	}
-	
-	public Devis(int id, int idM, float cout, int etat) {
-		this.id = id;
-		this.idM = idM;
-		this.cout = cout;
-		this.surcoutP = new ArrayList<Float>();
-		this.surcoutRM = new ArrayList<String>();
-		this.setEtat(etat);
+	public Devis() {
+		id = 0;
+		idM = 0;
+		cout = 0;
+		etat = 0;
 	}
 	public int getId() {
 		return id;
@@ -90,13 +86,13 @@ public class Devis {
 	public void setThisSurcoutRM(int i, String rm) {
 		surcoutRM.set(i, rm);
 	}
-
+	
+	public void validerDevis() {
+		this.etat = 1;
+	}
+	
 	public int getEtat() {
 		return etat;
-	}
-
-	public void setEtat(int etat) {
-		this.etat = etat;
 	}
 
 }

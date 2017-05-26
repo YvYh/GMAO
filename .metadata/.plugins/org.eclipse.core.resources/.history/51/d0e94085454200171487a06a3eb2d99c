@@ -1,0 +1,12 @@
+package gmao;
+
+import javax.swing.JFrame;
+
+public class InterfaceAuthendification extends JFrame {
+	private niveau=1;
+	
+	public InterfaceAuthendification(){
+		
+	}
+
+}

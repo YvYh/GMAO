@@ -106,7 +106,6 @@ public class MenuResponsable extends JFrame implements ActionListener {
 				new InterfaceGD();
 			}
 		});
-		
 		boutonGC.addActionListener(this);
 		
 		
