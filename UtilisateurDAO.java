@@ -47,7 +47,7 @@ public class UtilisateurDAO {
 		Utilisateur retour = null;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("SELECT * FROM maintenance WHERE maint_id = ?");
+			ps = con.prepareStatement("SELECT * FROM utilisateur WHERE id = ?");
 			ps.setInt(1, idUtil);
 			rs = ps.executeQuery();
 			if (rs.next())
