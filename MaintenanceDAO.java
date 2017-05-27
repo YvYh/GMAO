@@ -27,7 +27,7 @@ public class MaintenanceDAO {
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
 			ps = con.prepareStatement("INSERT INTO maintenance (maint_idEnt, maint_cont, maint_type, maint_duree, maint_etat, maint_idOp) VALUES (?, ?, ?, ?, ?, ?)");
-			ps.setInt(1, maintenance.getId());
+			ps.setString(1, maintenance.getIdEnt());
 			ps.setString(2, maintenance.getcMaint());
 			ps.setString(3, maintenance.getType());
 			ps.setString(4, maintenance.getduree());
@@ -47,14 +47,23 @@ public class MaintenanceDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		PreparedStatement pss = null;
+		ResultSet rss = null;
 		Maintenance retour = null;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
 			ps = con.prepareStatement("SELECT * FROM maintenance WHERE maint_id = ?");
 			ps.setInt(1, idMaint);
 			rs = ps.executeQuery();
+			pss = con.prepareStatement("SELECT * FROM entreprise JOIN maintenance ON idEnt = maint_idEnt WHERE maint_id = ?");
+			pss.setInt(1, idMaint);
+			rss = pss.executeQuery();
 			if (rs.next())
-				retour = new Maintenance(rs.getInt("maint_id"), rs.getInt("maint_idEnt"), rs.getString("maint_num"), rs.getString("maint_type"), rs.getString("maint_duree"), rs.getInt("maint_etat"), rs.getInt("maint_idOp"));
+				retour = new Maintenance(rs.getInt("maint_ref"), rs.getString("maint_num"), rs.getString("maint_type"), rs.getString("maint_duree"), rs.getInt("maint_etat"), rs.getInt("maint_idOp"));
+				if(rss.next()) {
+					retour.setEntreprise(rss.getString("ent_nom"), rss.getInt("ent_nsiret"), rss.getString("ent_adresse"), rss.getString("ent_ape"));
+				}
+					
 			} catch (Exception ee) {
 			ee.printStackTrace();
 			} 
@@ -72,15 +81,15 @@ public class MaintenanceDAO {
 		ResultSet rs = null;
 		List<Maintenance> retour = new ArrayList<Maintenance>();
 		
-		// connexion Ã  la base de donnÃ©es
+		// connexion ÃƒÂ  la base de donnÃƒÂ©es
 		try {
 	
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
 			ps = con.prepareStatement("SELECT * FROM maintenance");
 	
-			// on exÃ©cute la requÃªte
+			// on exÃƒÂ©cute la requÃƒÂªte
 			rs = ps.executeQuery();
-			// on parcourt les lignes du rÃ©sultat
+			// on parcourt les lignes du rÃƒÂ©sultat
 			while (rs.next())
 				retour.add(new Maintenance(rs.getInt("maint_id"), rs.getString("maint_num"), rs.getString("maint_type"), rs.getString("maint_duree")));
 	
@@ -108,4 +117,5 @@ public class MaintenanceDAO {
 	}
 
 }
+
 
