@@ -2,7 +2,7 @@ package app;
 
 
 public class Maintenance {
-	private int idEnt;
+	private Entreprise entreprise;
 	private int ref;
 	private String cMaint;
 	private String type;
@@ -10,10 +10,10 @@ public class Maintenance {
 	private boolean etat;
 	private int idOp;
 	
-	public Maintenance(int ref, int idEnt, String nMaint, String type, String duree, int etat, int idOp)
+	public Maintenance(int ref, Entreprise entreprise, String nMaint, String type, String duree, int etat, int idOp)
 	{
 		this.ref=ref;
-		this.idEnt = idEnt;
+		this.entreprise = entreprise;
 		this.cMaint = nMaint;
 		this.type = type;
 		this.duree = duree;
@@ -31,13 +31,28 @@ public class Maintenance {
 		this.cMaint = nMaint;
 		this.type = type;
 		this.duree = duree;
-		idEnt=0;
+		this.entreprise = new Entreprise();
 		idOp=0;
 		etat=false;
 	}
 	
+	public Maintenance(int ref, String nMaint, String type, String duree, int etat, int idOp)
+	{
+		this.ref=ref;
+		this.cMaint = nMaint;
+		this.type = type;
+		this.duree = duree;
+		this.entreprise = new Entreprise();
+		this.idOp = idOp;
+		if (etat==1)
+			this.etat = true;
+		else
+			this.etat = false;
+	}
+	
+	
 	public Maintenance() {
-		this.idEnt=0;
+		this.entreprise = new Entreprise();
 		this.ref=0;
 		this.cMaint=null;
 		this.type=null;
@@ -45,16 +60,19 @@ public class Maintenance {
 		this.etat=false;
 		this.idOp=0;
 	}
+	
+	public void setEntreprise(String nom, int siret, String adresse, String ape) {
+		this.entreprise.setNom(nom);
+		this.entreprise.setnSiret(siret);
+		this.entreprise.setAdresse(adresse);
+		this.entreprise.setApe(ape);
+	}
 
-	public int getId()
+	public String getIdEnt()
 	{
-		return idEnt;
+		return entreprise.getApe();
 	}
 	
-	public void setId(int idEnt)
-	{
-		this.idEnt = idEnt;
-	}
 	public String getcMaint()
 	{
 		return cMaint;
