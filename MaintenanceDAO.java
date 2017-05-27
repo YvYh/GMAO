@@ -26,13 +26,14 @@ public class MaintenanceDAO {
 		int retour = 0;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("INSERT INTO maintenance (maint_idEnt, maint_cont, maint_type, maint_duree, maint_etat, maint_idOp) VALUES (?, ?, ?, ?, ?, ?)");
-			ps.setInt(1, maintenance.getId());
-			ps.setString(2, maintenance.getcMaint());
-			ps.setString(3, maintenance.getType());
-			ps.setString(4, maintenance.getduree());
-			ps.setInt(5, maintenance.getEtat());
-			ps.setInt(6, maintenance.getidOp());
+			ps = con.prepareStatement("INSERT INTO maintenance (maint_ref, maint_ident, maint_cont, maint_type, maint_duree, maint_etat, maint_idOp) VALUES (?, ?, ?, ?, ?, ?, ?)");
+			ps.setInt(1, maintenance.getRef());
+			ps.setString(2, maintenance.getIdEnt());
+			ps.setString(3, maintenance.getcMaint());
+			ps.setString(4, maintenance.getType());
+			ps.setString(5, maintenance.getduree());
+			ps.setInt(6, maintenance.getEtat());
+			ps.setInt(7, maintenance.getidOp());
 			retour = ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
