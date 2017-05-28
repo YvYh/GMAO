@@ -150,7 +150,7 @@ public class OperateurDAO {
 		return retour;
 	}
 	
-		public int updateOperateur(int id, String nom, String prenom, String mdp, String adresse, String tel, int etat) {
+		public int updateOperateur(Operateur op) {
 		Connection con = null;
 		PreparedStatement ps = null;
 		PreparedStatement pss = null;
@@ -158,15 +158,16 @@ public class OperateurDAO {
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
 			ps = con.prepareStatement("UPDATE utilisateur SET util_nom = ?, util_prenom = ?, util_mdp = ? WHERE id = ?");
-			ps.setString(1, nom);
-			ps.setString(2, prenom);
-			ps.setString(3, mdp);
+			ps.setString(1, op.getNom());
+			ps.setString(2, op.getPrenom());
+			ps.setString(3, op.getMotDePasse());
+			ps.setInt(4, op.getID());
 			retour = ps.executeUpdate();
 			pss = con.prepareStatement("UPDATE operateur SET op_adresse = ?, op_tel = ?, op_etat = ? WHERE idOp = ?");
-			pss.setString(1, adresse);
-			pss.setString(2, tel);
-			pss.setInt(3, etat);
-			pss.setInt(4, id);
+			pss.setString(1, op.getAdresse());
+			pss.setString(2, op.getTel());
+			pss.setInt(3, op.getEtat());
+			pss.setInt(4, op.getID());
 			retour = pss.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
