@@ -152,5 +152,25 @@ public class DevisDAO {
 		}
 		return retour;
 	}
+	
+	public int updateDevis(int id, int idM, float cout, int etat) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int retour = 0;
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE devis SET maint_ref = ?, devis_cout = ?, devis_etat = ? WHERE devis_id = ?");
+			ps.setInt(1, idM);
+			ps.setFloat(2, cout);
+			ps.setInt(3, etat);
+			retour = ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {if (ps != null) ps.close();} catch (Exception ignore) {}
+			try {if (con != null) con.close();} catch (Exception ignore) {}
+		}
+		return retour;
+	}
 
 }
