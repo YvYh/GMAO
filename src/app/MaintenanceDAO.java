@@ -244,7 +244,7 @@ public class MaintenanceDAO {
 		return retour;
 	}
 	
-		public int updateMaintenance(int ref, Entreprise entreprise, String nMaint, String type, String duree, int etat, int idOp) {
+	public int updateMaintenance(Maintenance m) {
 		Connection con = null;
 		PreparedStatement ps = null;
 		PreparedStatement pss = null;
@@ -252,11 +252,12 @@ public class MaintenanceDAO {
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
 			ps = con.prepareStatement("UPDATE maintenance SET maint_cont = ?, maint_type = ?, maint_duree = ?, maint_etat = ?, maint_idOp = ?  WHERE ref = ?");
-			ps.setString(1, nMaint);
-			ps.setString(2, type);
-			ps.setString(3, duree);
-			ps.setInt(4, etat);
-			ps.setInt(4, idOp);
+			ps.setString(1, m.getcMaint());
+			ps.setString(2, m.getType());
+			ps.setString(3, m.getduree());
+			ps.setInt(4, m.getEtat());
+			ps.setInt(5, m.getidOp());
+			ps.setInt(6, m.getRef());
 			retour = ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -266,11 +267,12 @@ public class MaintenanceDAO {
 		}
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			pss = con.prepareStatement("UPDATE entreprise SET ent_nom = ?, ent_nsiret = ?, ent_adresse = ?, ent_ape = ? WHERE ref = ?");
-			pss.setString(1, entreprise.getNom());
-			pss.setInt(2, entreprise.getnSiret());
-			pss.setString(3, entreprise.getAdresse());
-			pss.setString(4, entreprise.getApe());
+			pss = con.prepareStatement("UPDATE entreprise SET ent_nom = ?, ent_nsiret = ?, ent_adresse = ?, ent_ape = ? WHERE idEnt = ?");
+			pss.setString(1, m.getEntreprise().getNom());
+			pss.setInt(2, m.getEntreprise().getnSiret());
+			pss.setString(3, m.getEntreprise().getAdresse());
+			pss.setString(4, m.getEntreprise().getApe());
+			pss.setInt(5, m.getEntreprise().getID());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -279,6 +281,5 @@ public class MaintenanceDAO {
 	}
 		return retour;
 	}
-
 }
 
