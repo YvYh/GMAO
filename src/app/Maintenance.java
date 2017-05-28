@@ -63,6 +63,7 @@ public class Maintenance {
 		this.idOp=0;
 	}
 	
+
 	public void setEntreprise(Entreprise e) {
 		this.entreprise=e;
 		this.idEnt=e.getID();
@@ -71,7 +72,6 @@ public class Maintenance {
 	public Entreprise getEntreprise() {
 		return entreprise;
 	}
-
 	public int getId()
 	{
 		return id;

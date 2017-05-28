@@ -100,11 +100,37 @@ public class EntrepriseDAO {
 			return retour;
 			}
 	
+<<<<<<< HEAD
 	/**
 	 * permet de renouvler une entreprise
 	 * @param e entreprise ¨¤ renouvler
 	 * @return 1 s'il r¨¦ussit
 	 */
+=======
+		public int getIdEnt(String nom) {
+		int retour = 0;
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("SELECT * FROM entreprise WHERE ent_nom = ?");
+			ps.setString(1, nom);
+			rs = ps.executeQuery();
+			retour = (rs.getInt("ent_id"));
+		}
+		catch (Exception ee) {
+			ee.printStackTrace();
+			} 
+		finally {
+			try { if (rs != null) rs.close();} catch (Exception ignore) {}
+			try { if (ps != null) ps.close();} catch (Exception ignore) {}
+			try { if (con != null) con.close();} catch (Exception ignore) {}
+			}
+		return retour;
+	}
+	
+>>>>>>> origin/master
 	public int updateEntreprise(Entreprise e) {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -126,6 +152,7 @@ public class EntrepriseDAO {
 		}
 		return retour;
 	}
+<<<<<<< HEAD
 
 	/**
 	 * permet de copier tous les entreprises
@@ -198,3 +225,6 @@ public class EntrepriseDAO {
 		return retour;
 	}
 }
+=======
+}
+>>>>>>> origin/master

@@ -164,12 +164,16 @@ public class OperateurDAO {
 		return retour;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * permet de renouvler un operateur
 	 * @param op operateur ¨¤ renouvler
 	 * @return 1 s'il r¨¦ussit
 	 */
 	public int updateOperateur(Operateur op) {
+=======
+		public int updateOperateur(Operateur op) {
+>>>>>>> origin/master
 		Connection con = null;
 		PreparedStatement ps = null;
 		PreparedStatement pss = null;

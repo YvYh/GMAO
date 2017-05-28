@@ -204,16 +204,22 @@ public class DevisDAO {
 		return retour;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * permet de renouvler un devis dans la BDD
 	 * @param d devis ¨¤ renouvler
 	 * @return 1 s'il r¨¦ussit
 	 */
+=======
+>>>>>>> origin/master
 	public int updateDevis(Devis d) {
 		Connection con = null;
 		PreparedStatement ps = null;
 		PreparedStatement pss = null;
+<<<<<<< HEAD
 		PreparedStatement ps1 = null;
+=======
+>>>>>>> origin/master
 		int retour = 0;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
@@ -224,6 +230,7 @@ public class DevisDAO {
 			ps.setInt(4, d.getId());
 			retour = ps.executeUpdate();
 			pss = con.prepareStatement("DELETE FROM surcout WHERE devis_id = ?");
+<<<<<<< HEAD
 			pss.setInt(1, d.getId());
 			retour = pss.executeUpdate();
 			for(int i=0; i<d.sizeSurcoutP(); i++) {
@@ -235,6 +242,16 @@ public class DevisDAO {
 				
 			}
 			retour = ps1.executeUpdate();
+=======
+			retour = pss.executeUpdate();
+			for(int i=1; i<d.sizeSurcoutP() +1; i++) {
+				pss = con.prepareStatement("INSERT INTO surcout (devis_id, surcout_p, surcout_rm) VALUES (?, ?, ?)");
+				pss.setInt(1, d.getId());
+				pss.setFloat(2, d.getThisSurcoutP(i));
+				pss.setString(3, d.getThisSurcoutRM(i));
+				retour = ps.executeUpdate();
+			}
+>>>>>>> origin/master
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -243,4 +260,9 @@ public class DevisDAO {
 		}
 		return retour;
 	}
+<<<<<<< HEAD
 }
+=======
+
+}
+>>>>>>> origin/master

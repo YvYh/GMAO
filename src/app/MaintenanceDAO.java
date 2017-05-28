@@ -131,6 +131,105 @@ public class MaintenanceDAO {
 		return retour;
 	}
 	
+<<<<<<< HEAD
+=======
+	
+	public int modifierEnt(int ref, int ident) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int retour = 0;
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE maintenance SET ident = ? WHERE ref = ?");
+			ps.setInt(1, ident);
+			ps.setInt(2, ref);
+			retour = ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {if (ps != null) ps.close();} catch (Exception ignore) {}
+			try {if (con != null) con.close();} catch (Exception ignore) {}
+		}
+		return retour;
+	}
+	
+	
+	public int modifierCont(int ref, String cont) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int retour = 0;
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE maintenance SET ident = ? WHERE ref = ?");
+			ps.setString(1, ident);
+			ps.setInt(2, ref);
+			retour = ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {if (ps != null) ps.close();} catch (Exception ignore) {}
+			try {if (con != null) con.close();} catch (Exception ignore) {}
+		}
+		return retour;
+	}
+	
+	public int modifierType(int ref, String type) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int retour = 0;
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE maintenance SET maint_type = ? WHERE ref = ?");
+			ps.setString(1, type);
+			ps.setInt(2, ref);
+			retour = ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {if (ps != null) ps.close();} catch (Exception ignore) {}
+			try {if (con != null) con.close();} catch (Exception ignore) {}
+		}
+		return retour;
+	}
+	
+	public int modifierDuree(int ref, String duree) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int retour = 0;
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE maintenance SET maint_duree = ? WHERE ref = ?");
+			ps.setString(1, duree);
+			ps.setInt(2, ref);
+			retour = ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {if (ps != null) ps.close();} catch (Exception ignore) {}
+			try {if (con != null) con.close();} catch (Exception ignore) {}
+		}
+		return retour;
+	}
+	
+	public int modifierEtat(int ref, int etat) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int retour = 0;
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE maintenance SET maint_etat = ? WHERE ref = ?");
+			ps.setInt(1, etat);
+			ps.setInt(2, ref);
+			retour = ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {if (ps != null) ps.close();} catch (Exception ignore) {}
+			try {if (con != null) con.close();} catch (Exception ignore) {}
+		}
+		return retour;
+	}
+>>>>>>> origin/master
 	
 	/**
 	 * permet de valider une maintenance
@@ -145,7 +244,11 @@ public class MaintenanceDAO {
 		int etat = 1;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
+<<<<<<< HEAD
 			ps = con.prepareStatement("UPDATE maintenance SET maint_id = ? WHERE maint_etat = ?");
+=======
+			ps = con.prepareStatement("UPDATE maintenance SET maint_etat = ? WHERE ref = ?");
+>>>>>>> origin/master
 			ps.setInt(1, etat);
 			ps.setInt(2, ref);
 			retour = ps.executeUpdate();
@@ -164,7 +267,7 @@ public class MaintenanceDAO {
 		int retour = 0;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("UPDATE maintenance SET ref = ? WHERE maint_idOp = ?");
+			ps = con.prepareStatement("UPDATE maintenance SET maint_idOp = ? WHERE ref = ?");
 			ps.setInt(1, idOp);
 			ps.setInt(2, ref);
 			retour = ps.executeUpdate();
@@ -177,6 +280,7 @@ public class MaintenanceDAO {
 		return retour;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * permet de renouvler une maintenance
 	 * @param m maintenance ид renouvler
@@ -189,13 +293,27 @@ public class MaintenanceDAO {
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
 			ps = con.prepareStatement("UPDATE maintenance SET maint_cont = ?, maint_type = ?, maint_duree = ?, maint_etat = ?, maint_idOp = ?, maint_ident =? WHERE maint_id = ?");
+=======
+	public int updateMaintenance(Maintenance m) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		PreparedStatement pss = null;
+		int retour = 0;
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE maintenance SET maint_cont = ?, maint_type = ?, maint_duree = ?, maint_etat = ?, maint_idOp = ?  WHERE ref = ?");
+>>>>>>> origin/master
 			ps.setString(1, m.getcMaint());
 			ps.setString(2, m.getType());
 			ps.setString(3, m.getduree());
 			ps.setInt(4, m.getEtat());
 			ps.setInt(5, m.getidOp());
+<<<<<<< HEAD
 			ps.setInt(6, m.getIdEnt());
 			ps.setInt(7, m.getId());
+=======
+			ps.setInt(6, m.getRef());
+>>>>>>> origin/master
 			retour = ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -203,9 +321,25 @@ public class MaintenanceDAO {
 			try {if (ps != null) ps.close();} catch (Exception ignore) {}
 			try {if (con != null) con.close();} catch (Exception ignore) {}
 		}
+<<<<<<< HEAD
 		
+=======
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			pss = con.prepareStatement("UPDATE entreprise SET ent_nom = ?, ent_nsiret = ?, ent_adresse = ?, ent_ape = ? WHERE idEnt = ?");
+			pss.setString(1, m.getEntreprise().getNom());
+			pss.setInt(2, m.getEntreprise().getnSiret());
+			pss.setString(3, m.getEntreprise().getAdresse());
+			pss.setString(4, m.getEntreprise().getApe());
+			pss.setInt(5, m.getEntreprise().getID());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {if (ps != null) pss.close();} catch (Exception ignore) {}
+			try {if (con != null) con.close();} catch (Exception ignore) {}
+	}
+>>>>>>> origin/master
 		return retour;
 	}
-
 }
 
