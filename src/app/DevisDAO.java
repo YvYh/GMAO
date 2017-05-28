@@ -152,5 +152,36 @@ public class DevisDAO {
 		}
 		return retour;
 	}
+	
+	public int updateDevis(Devis d) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		PreparedStatement pss = null;
+		int retour = 0;
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE devis SET maint_ref = ?, devis_cout = ?, devis_etat = ? WHERE devis_id = ?");
+			ps.setInt(1, d.getIdM());
+			ps.setFloat(2, d.getCout());
+			ps.setInt(3, d.getEtat());
+			ps.setInt(4, d.getId());
+			retour = ps.executeUpdate();
+			pss = con.prepareStatement("DELETE FROM surcout WHERE devis_id = ?");
+			retour = pss.executeUpdate();
+			for(int i=1; i<d.sizeSurcoutP() +1; i++) {
+				pss = con.prepareStatement("INSERT INTO surcout (devis_id, surcout_p, surcout_rm) VALUES (?, ?, ?)");
+				pss.setInt(1, d.getId());
+				pss.setFloat(2, d.getThisSurcoutP(i));
+				pss.setString(3, d.getThisSurcoutRM(i));
+				retour = ps.executeUpdate();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {if (ps != null) ps.close();} catch (Exception ignore) {}
+			try {if (con != null) con.close();} catch (Exception ignore) {}
+		}
+		return retour;
+	}
 
 }
