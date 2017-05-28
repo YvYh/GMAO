@@ -87,21 +87,21 @@ public class EntrepriseDAO {
 		return retour;
 	}
 	
-	public int updateEntreprise(int ident, String nom, int nSiret, String adresse, String ape) {
+	public int updateEntreprise(Entreprise e) {
 		Connection con = null;
 		PreparedStatement ps = null;
 		int retour = 0;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
 			ps = con.prepareStatement("UPDATE entreprise SET ent_nom = ?, ent_nSiret = ?, ent_adresse = ?, ent_ape = ?  WHERE idEnt = ?");
-			ps.setString(1, nom);
-			ps.setInt(2, nSiret);
-			ps.setString(3, adresse);
-			ps.setString(4, ape);
-			ps.setInt(5, ident);
+			ps.setString(1, e.getNom());
+			ps.setInt(2, e.getnSiret());
+			ps.setString(3, e.getAdresse());
+			ps.setString(4, e.getApe());
+			ps.setInt(5, e.getID());
 			retour = ps.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ae) {
+			ae.printStackTrace();
 		} finally {
 			try {if (ps != null) ps.close();} catch (Exception ignore) {}
 			try {if (con != null) con.close();} catch (Exception ignore) {}
