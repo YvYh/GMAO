@@ -70,7 +70,12 @@ public class InterfaceAuthentification extends JFrame{ //implements ActionListen
 							{
 								new MenuResponsable(u.getNom(), u.getPrenom());//turn into director's menu
 							}
+							else if(u.getEtat()==2)
+								new MenuOperateur(u.getID());
+							else if(u.getEtat()==3)
+								new MenuClient(u.getID());
 						}
+						
 							
 						else//password is wrong
 						{

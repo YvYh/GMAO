@@ -2,30 +2,40 @@ package app;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class InterfaceGO extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JTabbedPane tabbed;
 	private CardLayout card = new CardLayout();
+	private Devis d;
+	private DevisDAO dDAO;
 
 	
-	
+	public static void main(String[] args)
+	{
+		new InterfaceGO(1);
+	}
 	public InterfaceGO(int etat){
 		JPanel p = new JPanel();
 		p.setLayout(card);
@@ -41,7 +51,6 @@ public class InterfaceGO extends JFrame{
 		this.setContentPane(p);
 		this.setTitle("Opérateur");
         this.setSize(400,450);
-		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		
 	}
@@ -57,11 +66,12 @@ public class InterfaceGO extends JFrame{
 		panel.setLayout(new BorderLayout());
 		tabbed.addTab("Saisir", saisirO());
 		tabbed.addTab("surcôut",surcout());
-		//tabbed.addTab("Consultation", consultation());
+		tabbed.addTab("Consultation", consultation());
 		panel.add(tabbed,BorderLayout.CENTER);
 		return panel;
 		
 	}
+	
 	
 	/**
 	 * menu pour la version d'operateur
@@ -74,7 +84,7 @@ public class InterfaceGO extends JFrame{
 		tabbed = new JTabbedPane();
 		panel.setLayout(new BorderLayout());
 		tabbed.add("surcout", surcout());
-		//tabbed.addTab("Cconsultation", consultation());
+		tabbed.addTab("consultation", consultation());
 		panel.add(tabbed,BorderLayout.CENTER);
 		return panel;
 	}
@@ -86,7 +96,7 @@ public class InterfaceGO extends JFrame{
 	public JPanel saisirO()
 	{
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(6,1));
+		panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
 		
 		JLabel labNom = new JLabel("Nom:");
 		JTextField textNom = new JTextField(10);
@@ -97,6 +107,13 @@ public class InterfaceGO extends JFrame{
 		pNom.add(textNom);
 		pNom.add(labPrenom);
 		pNom.add(textPrenom);
+		
+		
+		JLabel labId = new JLabel("Id:");
+		JTextField textId = new JTextField(20);
+		JPanel pId = new JPanel();
+		pId.add(labId);
+		pId.add(textId);
 		
 		JLabel labMot = new JLabel("Mot de passe:");
 		JTextField textMot = new JTextField(20);
@@ -120,6 +137,7 @@ public class InterfaceGO extends JFrame{
 		JLabel labResultat = new JLabel();
 		
 		panel.add(pNom);
+		panel.add(pId);
 		panel.add(pMot);
 		panel.add(pAdresse);
 		panel.add(pTel);
@@ -130,13 +148,12 @@ public class InterfaceGO extends JFrame{
 		bOK.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e)
 			{
-				int id = 12345;
 				Operateur o = new Operateur(textNom.getText(),
 						textPrenom.getText(),
 						textMot.getText(),
 						textAdresse.getText(),
 						textTel.getText(),
-						id);
+						Integer.parseInt(textId.getText()));
 				OperateurDAO oDAO = new OperateurDAO();
 				int resultat = oDAO.ajouter(o);
 				if (resultat != 0)
@@ -151,107 +168,164 @@ public class InterfaceGO extends JFrame{
 	}
 	
 	public JComponent surcout(){
-		int niveau = 1;
 		JPanel p = new JPanel();
-		Devis d = new Devis();
-		DevisDAO dDAO = new DevisDAO();
+		d = new Devis();
+		dDAO = new DevisDAO();
+		CardLayout card = new CardLayout();
 		
-		//while(niveau != 0)
-		{
-			switch(niveau)
-			{
-			case 1://panel pour chercher un devis existe
-			{
-				JPanel panelC = new JPanel();
-			    panelC.setLayout(new GridLayout(2,2));
-			    JLabel labRef = new JLabel("Ref:");
-			    JTextField textRef = new JTextField(15);
-			    JButton bCher = new JButton("Chercher");
-			    JLabel resultat = new JLabel();
-			    panelC.add(labRef);
-			    panelC.add(textRef);
-			    panelC.add(bCher);
-			    panelC.add(resultat);
-			    if (bCher.isSelected())
-			    {
-					d = dDAO.getDevis(Integer.parseInt(textRef.getText()));
-					if (d.getId() ==0)
-					{
-						resultat.setText("Ce devis n'existe pas");
-						panelC.revalidate();
-					}
-					else
-						niveau =2;
-			    }
-			    panelC.setVisible(true);
-			    p.add(panelC);
-			    p.revalidate();
-			    p.repaint();
-			    break;
+		p.setLayout(card);
+		//chercher la maintenance
+		JPanel panelC = new JPanel();
+	    //panelC.setLayout(new BoxLayout(panelC, BoxLayout.PAGE_AXIS));
+	    JLabel labRef = new JLabel("Ref:");
+	    JTextField textId = new JTextField(15);
+	    JButton bCher = new JButton("Chercher");
+	    JLabel resultat = new JLabel();
+	    panelC.add(labRef);
+	    panelC.add(textId);
+	    panelC.add(bCher);
+	    panelC.add(resultat);
+	    p.add(panelC, "Chercher");
+	    
+	    
+	    //saisir le devis
+	    JPanel pS = new JPanel();
+	    pS.setLayout(new BoxLayout(pS, BoxLayout.PAGE_AXIS));
+		JLabel labP = new JLabel("Prix:");
+		JTextField textP = new JTextField(10);
+		JLabel labRM = new JLabel("Remarque:");
+		JTextArea textRM = new JTextArea();
+		JButton bAjouter = new JButton("Ajouter");
+		JButton bReturn = new JButton("Return");
+		pS.add(labP);
+		pS.add(textP);
+		pS.add(labRM);
+		pS.add(textRM);
+		pS.add(bAjouter);
+		pS.add(bReturn);
+		p.add(pS, "Saisir");
+		
+		card.show(p, "Chercher");
+		
+		bCher.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				d = dDAO.getDevis(Integer.parseInt(textId.getText()));
+				System.out.print(d.getId());
+				if (d.getId() ==0)
+				{
+					JOptionPane.showMessageDialog(null, " Ce devis n'existe pas ", " Error ", JOptionPane.ERROR_MESSAGE);
+					textId.setText(null);
+					panelC.revalidate();
+					panelC.repaint();
+					card.show(p, "Chercher");
+				}
+				else
+					card.show(p, "Saisir");
 			}
-			
-			case 2://detailler le surcout
-			{
-				JPanel pS = new JPanel();
-				JLabel labP = new JLabel("Prix:");
-				JTextField textP = new JTextField(10);
-				JLabel labRM = new JLabel("Remarque:");
-				JTextArea textRM = new JTextArea();
-				JButton bAjouter = new JButton("Ajouter");
-				JButton bReturn = new JButton("Return");
-				pS.add(labP);
-				pS.add(textP);
-				pS.add(labRM);
-				pS.add(textRM);
-				pS.add(bAjouter);
-				pS.add(bReturn);
-				p.removeAll();
-				p.add(pS);
-				p.revalidate();
-			    p.repaint();
-			    if (bAjouter.isSelected())
-			    {
-			    	d.surcoutP.add(Float.valueOf(textP.getText()));
-			    	d.surcoutRM.add(textRM.getText());
-			    	dDAO.updateDevis(d);
-			    	niveau = 3;
-			    }
-			    if (bReturn.isSelected())
-			    {
-			    	niveau = 1;
-			    	d = new Devis();
-			    }
-			    break;
+		});
+		
+		
+		bAjouter.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				d.surcoutP.add(Float.valueOf(textP.getText()));
+		    	d.surcoutRM.add(textRM.getText());
+		    	dDAO.updateDevis(d);
+		    	JOptionPane.showMessageDialog(null, "Devis est bien enregistre", "Réussi", JOptionPane.INFORMATION_MESSAGE);
+		    	card.previous(p);
 			}
-			
-			case 3:
-				JLabel lab = new JLabel("Devis N."+d.getId()+"est renouvele");
-				niveau = 1;
-				d = new Devis();
-		    }
-		}
+		});
+		
+		bReturn.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				card.previous(p);
+			}
+		});
 		return p;
 		
 	}
 	
+	public JPanel Operateur(Operateur op)
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		
+		JLabel labNom = new JLabel("Nom:");
+		JTextField textNom = new JTextField(10);
+		textNom.setText(op.getNom());
+		textNom.setEditable(false);
+		JLabel labPrenom = new JLabel("Prenom:");
+		JTextField textPrenom = new JTextField(10);
+		textPrenom.setText(op.getPrenom());
+		textPrenom.setEditable(false);
+		JPanel pNom = new JPanel();
+		JPanel pPreNom = new JPanel();
+		pNom.add(labNom);
+		pNom.add(textNom);
+		pPreNom.add(labPrenom);
+		pPreNom.add(textPrenom);
+		
+		
+		JLabel labId = new JLabel("Id:");
+		JTextField textId = new JTextField(String.valueOf(op.getID()));
+		textId.setEditable(false);
+		JPanel pId = new JPanel();
+		pId.add(labId);
+		pId.add(textId);
+
+		JLabel labAdresse = new JLabel("Adresse:");
+		JTextField textAdresse = new JTextField();
+		if (op.getAdresse()==null)
+			textAdresse.setText("Null");
+		else
+			textAdresse.setText(op.getAdresse());
+		textAdresse.setEditable(false);
+		JPanel pAdresse = new JPanel();
+		pAdresse.add(labAdresse);
+		pAdresse.add(textAdresse);
+		
+		JLabel labTel = new JLabel("Tel:");
+		JTextField textTel = new JTextField();
+		if (op.getTel()==null)
+			textTel.setText("Null");
+		else
+			textTel.setText(op.getTel());
+		textTel.setEditable(false);
+		JPanel pTel = new JPanel();
+		pTel.add(labTel);
+		pTel.add(textTel);
+		
+		
+		panel.add(pNom);
+		panel.add(pPreNom);
+		panel.add(pId);
+		panel.add(pAdresse);
+		panel.add(pTel);
+		
+		return panel;
+	}
 	
-	/*public JPanel consultation()
+	public JPanel consultation()
 	{
 		JPanel p = new JPanel();
-		ArrayList<Operateur> oList = new ArrayList<Operateur>();
+		ArrayList<app.Operateur> oList = new ArrayList<Operateur>();
 		OperateurDAO oDAO = new OperateurDAO();
-		oList.addAll(oDAO.getListeOperateur());
-		JLabel lab = new JLabel();
-		
+		oList.addAll(oDAO.getListeOperateur());;
 
 		JList list = new JList(oList.toArray());
 		p.setLayout(new BorderLayout());
 		list.setVisibleRowCount(10);
 		list.setBorder(BorderFactory.createTitledBorder("Les operateur"));
 		p.add(new JScrollPane(list), BorderLayout.CENTER);
-		p.add(lab,BorderLayout.PAGE_END);
-		
+		list.addListSelectionListener(new ListSelectionListener(){
+			//quand on choisit un operateur, il affiche l'interface de cette operateur
+			public void valueChanged(ListSelectionEvent e) {
+				JDialog dialog = new JDialog(InterfaceGO.this,"Operateur",true);
+				dialog.setContentPane(Operateur(oList.get(list.getSelectedIndex())));
+		        dialog.setBounds(500,500,300,300);
+		        dialog.setVisible(true);
+			}
+		});
 		return p;
-	}*/
+	}
 
 }

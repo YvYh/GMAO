@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OperateurDAO {
 	final static String URL = "jdbc:oracle:thin:@localhost:1521:xe";
@@ -25,7 +27,7 @@ public class OperateurDAO {
 		int retour = 0;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("INSERT INTO utilisateur (util_nom, util_prenom, util_mdp, util_etat, util_id) VALUES (?, ?, ?, ?, ?)");
+			ps = con.prepareStatement("INSERT INTO utilisateur_uti (uti_nom, uti_prenom, uti_mot, uti_etat, uti_id) VALUES (?, ?, ?, ?, ?)");
 			ps.setString(1, op.getNom());
 			ps.setString(2, op.getPrenom());
 			ps.setString(3, op.getMotDePasse());
@@ -53,19 +55,17 @@ public class OperateurDAO {
 		Operateur retour = null;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("SELECT * FROM utilisateur WHERE util_id = ?");
+			ps = con.prepareStatement("SELECT * FROM utilisateur_uti WHERE uti_id = ?");
 			ps.setInt(1, idOp);
 			rs = ps.executeQuery();
 			if (rs.next())
 			{
-				retour = new Operateur(rs.getString("util_nom"), rs.getString("util_prenom"), rs.getString("util_mdp"), rs.getInt("util_etat"), rs.getInt("util_id"));
+				retour = new Operateur(rs.getString("uti_nom"), rs.getString("uti_prenom"), rs.getString("uti_mot"), rs.getInt("uti_etat"), rs.getInt("uti_id"));
 				ps1 = con.prepareStatement("SELECT * FROM operateur WHERE op_id = ?");
 				ps1.setInt(1, idOp);
 				rs1 = ps1.executeQuery();
 				retour.setAdresse(rs1.getString("op_adr"));
 				retour.setTel(rs1.getString("op_tel"));
-				
-				
 			}
 		}
 		catch (Exception ee) {
@@ -80,5 +80,75 @@ public class OperateurDAO {
 			}
 			return retour;
 			}
+
+
+	
+	public List<Operateur> getListeOperateur() {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		PreparedStatement ps1 = null;
+		ResultSet rs1 = null;
+
+		List<Operateur> retour = new ArrayList<Operateur>();
+
+		
+		// connexion Ã  la base de donnÃ©es
+		try {
+	
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("SELECT * FROM utilisateur_uti WHERE uti_etat=2");
+			rs = ps.executeQuery();
+			while (rs.next())
+			{
+				retour.add(new Operateur(rs.getString("uti_nom"), rs.getString("uti_prenom"), rs.getString("uti_mot"), rs.getInt("uti_etat"), rs.getInt("uti_id")));
+			}
+			for(int i=0;i<retour.size();i++)
+			{
+				ps1 = con.prepareStatement("SELECT * FROM operateur WHERE op_id = ?");
+				ps1.setInt(1, retour.get(i).getID());
+				rs1 = ps1.executeQuery();
+				if(rs1.next())
+				{
+					retour.get(i).setAdresse(rs1.getString("op_adr"));
+					retour.get(i).setTel(rs1.getString("op_tel"));
+				}
+			}
+
+		}catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			// fermeture du rs, du preparedStatement et de la connexion
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (Exception ignore) {
+			}
+			try {
+				if (rs1 != null)
+					rs.close();
+			} catch (Exception ignore) {
+			}
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (Exception ignore) {
+			}
+			try {
+				if (ps1 != null)
+					ps.close();
+			} catch (Exception ignore) {
+			}
+			try {
+				if (con != null)
+					con.close();
+			} catch (Exception ignore) {
+			}
+			
+
+		}
+		return retour;
+	}
+
 
 }

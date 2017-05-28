@@ -3,17 +3,17 @@ package app;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-import javax.swing.ButtonGroup;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -31,20 +31,26 @@ public class InterfaceGD extends JFrame {
 		
 		JTabbedPane tabbed = new JTabbedPane();
 		tabbed.addTab("Saisir", saisirD());
-		//tabbed.addTab("Modifier", chercherD());
+		tabbed.addTab("Modifier", chercherD());
 		//tabbed.addTab("Valider", validerD());
 		this.getContentPane().add(tabbed,BorderLayout.CENTER);
-		//this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Devis");
         this.setSize(500,450);
 		this.setVisible(true);
 	}
 	
+	public InterfaceGD(Devis d)
+	{
+		this.getContentPane().add(Devis(d));
+        this.setTitle("Devis");
+        this.setSize(500,450);
+		this.setVisible(true);
+	}
 	public static void main(String[] args)
 	{
 		new InterfaceGD();
 	}
-	public Component saisirD(){
+	public Component chercherD(){
 		/**
 		 * panel pour saisir un devis
 		 */
@@ -53,8 +59,8 @@ public class InterfaceGD extends JFrame {
 		p.setLayout(card);
 		
 		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout());
-		JLabel labRef = new JLabel("Ref:");
+		//panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
+		JLabel labRef = new JLabel("Ref de devis:");
 		JTextField textRef = new JTextField(15);
 		JButton bCher = new JButton("Chercher");
 		panel.add(labRef);
@@ -105,13 +111,14 @@ public class InterfaceGD extends JFrame {
 		return p;    
 	}
 	
-	/*public JPanel Devis(Devis d, Maintenance m){
+	public JPanel Devis(Devis d){
 		JPanel p = new JPanel();
 		JLabel labRef = new JLabel("Ref:");
 		JTextField textRef = new JTextField(d.getId());
 		
 		JLabel labC = new JLabel("Contenu");
-		JTextArea textC = new JTextArea(m.getcMaint());
+		MaintenanceDAO mDAO = new MaintenanceDAO();
+		JTextArea textC = new JTextArea(mDAO.getMaintenance(d.getIdM()).getcMaint());
 		
 		JLabel labCout = new JLabel("Cout:");
 		JTextField textCout = new JTextField(String.valueOf(d.getCout()));
@@ -124,32 +131,53 @@ public class InterfaceGD extends JFrame {
 		p.add(textCout);
 		
 		return p;
-	}*/
+	}
 	
-	
-	
+	public JPanel saisirD()
+	{
+		JPanel p = new JPanel();
+		JLabel labRef = new JLabel("Ref:");
+		JTextField textRef = new JTextField(10);
+		
+		JLabel labC = new JLabel("Maintenance");
+		MaintenanceDAO mDAO = new MaintenanceDAO();
+		ArrayList<Maintenance> list = new ArrayList<Maintenance>();
+		list.addAll(mDAO.getListeMaintenance());
+		JComboBox comboBox=new JComboBox(); 
+		for(int i =0; i<list.size();i++)
+			comboBox.addItem(list.get(i));
+
+		JLabel labCout = new JLabel("Cout:");
+		JTextField textCout = new JTextField(10);
+		
+		JButton bAjouter = new JButton("Ajouter");
+		p.setLayout(new BoxLayout(p,BoxLayout.PAGE_AXIS));
+		p.add(labRef);
+		p.add(textRef);
+		p.add(labC);
+		p.add(comboBox);
+		p.add(labCout);
+		p.add(textCout);
+		p.add(bAjouter);
+		
+		bAjouter.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				DevisDAO dDAO = new DevisDAO();
+				int idM;
+				idM=list.get(comboBox.getSelectedIndex()).getId();
+				System.out.print(idM);
+				Devis d = new Devis(Integer.parseInt(textRef.getText()),idM,Float.valueOf(textCout.getText()));
+				if (dDAO.ajouter(d)==1)
+					JOptionPane.showMessageDialog(null, "Ajout¨¦", "OK", JOptionPane.INFORMATION_MESSAGE);
+				else
+					JOptionPane.showMessageDialog(null, "peobleme", "Erreur", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		return p;
+	}
 	
 
 
 
-public JPanel Devis(Devis d, Maintenance m){
-	JPanel p = new JPanel();
-	JLabel labRef = new JLabel("Ref:");
-	JTextField textRef = new JTextField(d.getId());
-	
-	JLabel labC = new JLabel("Contenu");
-	JTextArea textC = new JTextArea(m.getcMaint());
-	
-	JLabel labCout = new JLabel("Cout:");
-	JTextField textCout = new JTextField(String.valueOf(d.getCout()));
-	
-	p.add(labRef);
-	p.add(textRef);
-	p.add(labC);
-	p.add(textC);
-	p.add(labCout);
-	p.add(textCout);
-	
-	return p;
-}
+
 }

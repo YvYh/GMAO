@@ -2,18 +2,18 @@ package app;
 
 
 public class Maintenance {
-	private Entreprise entreprise;
-	private int ref;
+	private int idEnt;
+	private int id;
 	private String cMaint;
 	private String type;
 	private String duree;
 	private boolean etat;
 	private int idOp;
 	
-	public Maintenance(int ref, Entreprise entreprise, String nMaint, String type, String duree, int etat, int idOp)
+	public Maintenance(int id, int idEnt, String nMaint, String type, String duree, int etat, int idOp)
 	{
-		this.ref=ref;
-		this.entreprise = entreprise;
+		this.id=id;
+		this.setIdEnt(idEnt);
 		this.cMaint = nMaint;
 		this.type = type;
 		this.duree = duree;
@@ -25,54 +25,36 @@ public class Maintenance {
 		this.idOp=idOp;
 	}
 	
-	public Maintenance(int ref, String nMaint, String type, String duree)
+	public Maintenance(int id, String nMaint, String type, String duree)
 	{
-		this.ref=ref;
+		this.id=id;
 		this.cMaint = nMaint;
 		this.type = type;
 		this.duree = duree;
-		this.entreprise = new Entreprise();
+		setIdEnt(0);
 		idOp=0;
 		etat=false;
 	}
 	
-	public Maintenance(int ref, String nMaint, String type, String duree, int etat, int idOp)
-	{
-		this.ref=ref;
-		this.cMaint = nMaint;
-		this.type = type;
-		this.duree = duree;
-		this.entreprise = new Entreprise();
-		this.idOp = idOp;
-		if (etat==1)
-			this.etat = true;
-		else
-			this.etat = false;
-	}
-	
-	
 	public Maintenance() {
-		this.entreprise = new Entreprise();
-		this.ref=0;
+		this.setIdEnt(0);
+		this.id=0;
 		this.cMaint=null;
 		this.type=null;
 		this.duree=null;
 		this.etat=false;
 		this.idOp=0;
 	}
-	
-	public void setEntreprise(String nom, int siret, String adresse, String ape) {
-		this.entreprise.setNom(nom);
-		this.entreprise.setnSiret(siret);
-		this.entreprise.setAdresse(adresse);
-		this.entreprise.setApe(ape);
-	}
 
-	public String getIdEnt()
+	public int getId()
 	{
-		return entreprise.getApe();
+		return id;
 	}
 	
+	public void setId(int id)
+	{
+		this.id = id;
+	}
 	public String getcMaint()
 	{
 		return cMaint;
@@ -126,12 +108,14 @@ public class Maintenance {
 		this.idOp=idOp;
 	}
 
-	public int getRef() {
-		return ref;
+	public int getIdEnt() {
+		return idEnt;
 	}
 
-	public void setRef(int ref) {
-		this.ref = ref;
+	public void setIdEnt(int idEnt) {
+		this.idEnt = idEnt;
 	}
+
+	
 
 }
