@@ -63,4 +63,49 @@ public class EntrepriseDAO {
 			}
 			return retour;
 			}
+	
+		public int getIdEnt(String nom) {
+		int retour = 0;
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("SELECT * FROM entreprise WHERE ent_nom = ?");
+			ps.setString(1, nom);
+			rs = ps.executeQuery();
+			retour = (rs.getInt("ent_id"));
+		}
+		catch (Exception ee) {
+			ee.printStackTrace();
+			} 
+		finally {
+			try { if (rs != null) rs.close();} catch (Exception ignore) {}
+			try { if (ps != null) ps.close();} catch (Exception ignore) {}
+			try { if (con != null) con.close();} catch (Exception ignore) {}
+			}
+		return retour;
+	}
+	
+	public int updateEntreprise(int ident, String nom, int nSiret, String adresse, String ape) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int retour = 0;
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE entreprise SET ent_nom = ?, ent_nSiret = ?, ent_adresse = ?, ent_ape = ?  WHERE idEnt = ?");
+			ps.setString(1, nom);
+			ps.setInt(2, nSiret);
+			ps.setString(3, adresse);
+			ps.setString(4, ape);
+			ps.setInt(5, ident);
+			retour = ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {if (ps != null) ps.close();} catch (Exception ignore) {}
+			try {if (con != null) con.close();} catch (Exception ignore) {}
+		}
+		return retour;
+	}
 }
