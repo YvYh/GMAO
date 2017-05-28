@@ -45,6 +45,18 @@ public class Maintenance {
 		this.etat=false;
 		this.idOp=0;
 	}
+	
+	public void setEntreprise(String nom, int siret, String adresse, String ape) {
+		this.entreprise.setNom(nom);
+		this.entreprise.setnSiret(siret);
+		this.entreprise.setAdresse(adresse);
+		this.entreprise.setApe(ape);
+	}
+	
+	public Entreprise getEntreprise() {
+		return entreprise;
+	}
+
 
 	public int getId()
 	{
