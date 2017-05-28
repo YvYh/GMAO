@@ -149,6 +149,33 @@ public class OperateurDAO {
 		}
 		return retour;
 	}
+	
+		public int updateOperateur(int id, String nom, String prenom, String mdp, String adresse, String tel, int etat) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		PreparedStatement pss = null;
+		int retour = 0;
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE utilisateur SET util_nom = ?, util_prenom = ?, util_mdp = ? WHERE id = ?");
+			ps.setString(1, nom);
+			ps.setString(2, prenom);
+			ps.setString(3, mdp);
+			retour = ps.executeUpdate();
+			pss = con.prepareStatement("UPDATE operateur SET op_adresse = ?, op_tel = ?, op_etat = ? WHERE idOp = ?");
+			pss.setString(1, adresse);
+			pss.setString(2, tel);
+			pss.setInt(3, etat);
+			pss.setInt(4, id);
+			retour = pss.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {if (ps != null) ps.close();} catch (Exception ignore) {}
+			try {if (con != null) con.close();} catch (Exception ignore) {}
+		}
+		return retour;
+	}
 
 
 }
