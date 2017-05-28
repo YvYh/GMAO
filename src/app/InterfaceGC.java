@@ -5,74 +5,107 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+/**
+ * Interface de Gestion Client
+ * -saisir client
+ * -consultation
+ * (pour les responsables)
+ * @author YH
+ *
+ */
 public class InterfaceGC extends JFrame{
-	
-	/**
-	 * 
-	 */
+	JTextField textnSIRET;
 	private static final long serialVersionUID = 1L;
 
 	public InterfaceGC(int etat)
 	{
-		if (etat==1)
-		{
-			JTabbedPane tabbed = new JTabbedPane();
-			tabbed.addTab("Saisir Client", saisirE());
-			tabbed.addTab("Consultationr", afficherListE());
-			this.getContentPane().add(tabbed,BorderLayout.CENTER);
-	        this.setTitle("Client");
-	        this.setSize(500,450);
-			this.setVisible(true);
-		}
+		JTabbedPane tabbed = new JTabbedPane();
+		tabbed.addTab("Saisir Client", saisirE());
+		tabbed.addTab("Consultation", afficherListE());
+		this.getContentPane().add(tabbed,BorderLayout.CENTER);
+        this.setTitle("Client");
+        this.setSize(500,450);
+		this.setVisible(true);
+	}
+
+	/**
+	 * permet d'afficher une liste de tous les entreprises
+	 * quand une entreprise est select¨¦e, il y aura une fenetre
+	 * qui contient les infos de cette entreprise
+	 * @return JPanel p 
+	 */
+	private Component afficherListE() {
+		JPanel p = new JPanel();
+		ArrayList<Entreprise> eList = new ArrayList<Entreprise>();
+		EntrepriseDAO eDAO = new EntrepriseDAO();
+		eList.addAll(eDAO.getListeEntreprise());;
+
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		JList list = new JList(eList.toArray());
+		p.setLayout(new BorderLayout());
+		list.setVisibleRowCount(10);
+		list.setBorder(BorderFactory.createTitledBorder("Les entreprises"));
+		p.add(new JScrollPane(list), BorderLayout.CENTER);
+		list.addListSelectionListener(new ListSelectionListener(){
+			//quand on choisit un operateur, il affiche l'interface de cette entreprise
+			public void valueChanged(ListSelectionEvent e) {
+				JDialog dialog = new JDialog(InterfaceGC.this,"Entrepriser",true);
+				dialog.setContentPane(afficherE(eList.get(list.getSelectedIndex())));
+		        dialog.setBounds(500,500,300,300);
+		        dialog.setVisible(true);
+			}
+		});
+		return p;
 		
 	}
 
-	private Component afficherListE() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private Component etatDossier(Entreprise ent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private Component rapport(Entreprise ent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	/**
 	 * afficher les info d'entreprise
 	 * @param ent l'entreprise a afficher
-	 * @return la panel d'info 
+	 * @return JPanel panel:  panel d'info 
 	 */
 	private JPanel afficherE(Entreprise ent) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(6,2));
 		
 		JLabel labNom = new JLabel("Nom:");
-		JTextField textNom = new JTextField(ent.getNom());
+		JTextField textNom = new JTextField();
+		textNom.setText(ent.getNom());
+		textNom.setEditable(false);
+		
 		JLabel labSIRET = new JLabel("SIRET:");
-		JTextField textSIRET = new JTextField(ent.getnSiret());
+		JTextField textSiret = new JTextField(String.valueOf(ent.getnSiret()));
+		textSiret.setEditable(false);
+		
 		JLabel labAdresse = new JLabel("Adresse:");
 		JTextField textAdresse = new JTextField(ent.getAdresse());
+		textAdresse.setEditable(false);
+		
 		JLabel labAPE = new JLabel("APE:");
 		JTextField textAPE = new JTextField(ent.getApe());
+		textAPE.setEditable(false);
 		
 		panel.add(labNom);
 		panel.add(textNom);
 		panel.add(labSIRET);
-		panel.add(textSIRET);
+		panel.add(textSiret);
 		panel.add(labAdresse);
 		panel.add(textAdresse);
 		panel.add(labAPE);
@@ -103,9 +136,19 @@ public class InterfaceGC extends JFrame{
 		return frame;
 	}
 
+	private Component etatDossier(Entreprise ent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Component rapport(Entreprise ent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/**
 	 * Ajouter une entreprise
-	 * @return panel de saisie Entreprise
+	 * @return JPanel panel de saisie
 	 */
 	private Component saisirE() {
 		JPanel panel = new JPanel();
@@ -113,9 +156,9 @@ public class InterfaceGC extends JFrame{
 		panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
 		
 		JLabel labNom = new JLabel("Nom:");
-		JTextField textNom = new JTextField(10);
+		JTextField textN = new JTextField(10);
 		JLabel labSIRET = new JLabel("SIRET:");
-		JTextField textSIRET = new JTextField(10);
+		textnSIRET = new JTextField(10);
 		JLabel labMot = new JLabel("Mot de passe:");
 		JTextField textMot = new JTextField(20);
 		JLabel labAdresse = new JLabel("Adresse:");
@@ -127,9 +170,9 @@ public class InterfaceGC extends JFrame{
 		JLabel labResultat = new JLabel();
 		
 		panel.add(labNom);
-		panel.add(textNom);
+		panel.add(textN);
 		panel.add(labSIRET);
-		panel.add(textSIRET);
+		panel.add(textnSIRET);
 		panel.add(labAdresse);
 		panel.add(textAdresse);
 		panel.add(labAPE);
@@ -142,17 +185,19 @@ public class InterfaceGC extends JFrame{
 		bOK.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e)
 			{
-				Entreprise ent = new Entreprise(textNom.getText(),
-						Integer.parseInt(textSIRET.getText()),
+				System.out.print(Integer.parseInt(textnSIRET.getText()));
+				Entreprise ent = new Entreprise(textN.getText(),
+						Integer.parseInt(textnSIRET.getText()),
 						textAdresse.getText(),
 						textAPE.getText(),
 						textMot.getText());
 				EntrepriseDAO eDAO = new EntrepriseDAO();
+				System.out.print(ent.getID());
 				int resultat = eDAO.ajouter(ent);
-				if (resultat != 0)
-					labResultat.setText("Client "+ent.getnSiret()+" est enr¨¦gistr¨¦");
-				else
+				if (resultat == 0)
 					labResultat.setText("Probleme d'enregistrer");
+				else
+					labResultat.setText("Client "+ent.getnSiret()+" est enr¨¦gistr¨¦");
 				
 			}
 		});

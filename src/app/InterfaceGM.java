@@ -22,15 +22,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-
+/**
+ * Interface Gestion Maintenance
+ * -saisir
+ * -afficher
+ * -modifier
+ * -valider
+ * -affectation
+ * @author YH
+ *
+ */
 public class InterfaceGM extends JFrame {
-	/**
-	 * interface of Gestion Maintenance 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JTabbedPane tabbed;
 	private JPanel panel;//basic panel
@@ -58,19 +63,19 @@ public class InterfaceGM extends JFrame {
 	private Maintenance m;
 	private ArrayList<Maintenance> mList;
 	private MaintenanceDAO mDAO;
+	@SuppressWarnings({ "unused", "rawtypes" })
 	private JList list;
-	private JPanel p;
 
 	public static void main(String[] args)
 	{
 		new InterfaceGM();
 	}
 	
+	/**
+	 * constucteur
+	 * menu de gestion maintenance
+	 */
 	public InterfaceGM(){
-		/**
-		 * construction of maintenance interface
-		 */
-		
 		tabbed = new JTabbedPane();
 		tabbed.addTab("Saisir", saisirM());
 		tabbed.addTab("Afficher", afficherM());
@@ -83,6 +88,10 @@ public class InterfaceGM extends JFrame {
 		this.setVisible(true);
 	}
 	
+	/**
+	 * cr¨¦er une fenetre qui afficher tous les maintenance
+	 * @param i aucun sens
+	 */
 	public InterfaceGM(int i){
 		this.setContentPane(ConsultationM());
 		this.setTitle("Maintenance");
@@ -188,9 +197,13 @@ public class InterfaceGM extends JFrame {
         
         bR.addActionListener(new ActionListener(){
         	public void actionPerformed(ActionEvent evt){
+        		
         		textRef.setText(null);
     			textC.setText(null);
     			textD.setText(null);
+    			pRef.revalidate();
+    			pC.revalidate();
+    			pDuree.revalidate();
     			panel.revalidate();
     			panel.repaint();
         	}
@@ -274,11 +287,11 @@ public class InterfaceGM extends JFrame {
 	
 	/**
 	 * parmet d'afficher une maintenance d'apres son id
-	 * @return
+	 * @return JPanel pA
 	 */
 	public Component afficherM(){
 		JPanel pA = new JPanel();
-		cardlay = new CardLayout();
+		CardLayout card = new CardLayout();
 		JPanel pC = new JPanel();
 		pC.setLayout(new java.awt.GridLayout(6,1));
 		
@@ -291,9 +304,9 @@ public class InterfaceGM extends JFrame {
 		pC.add(pRef);
 		pC.add(bCher);
 		
-		pA.setLayout(cardlay);
+		pA.setLayout(card);
 		pA.add(pC, "chercher");
-		cardlay.show(pA, "chercher");
+		card.show(pA, "chercher");
 
 		//action of "chercher" button
 		bCher.addActionListener(new ActionListener(){
@@ -305,22 +318,23 @@ public class InterfaceGM extends JFrame {
 				JButton bReturn = new JButton("Return");
 				p2.add(bReturn);
 				pA.add(p2, "maintenance");
-				cardlay.show(pA, "maintenance");
+				card.show(pA, "maintenance");
 				
 				bReturn.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
-						cardlay.previous(pA);
+						card.previous(pA);
 					}
 				});
 			}
 		});
-		
-		
-		return pA;
-		
+		return pA;		
 	}
 	
 
+	/**
+	 * permet de modifier un maintenance trouv¨¦ d'apr¨¨s son id
+	 * @return JPanel p
+	 */
 	public Component modifierM(){
 		JPanel p = new JPanel();
 		cardlay = new CardLayout();
@@ -407,7 +421,9 @@ public class InterfaceGM extends JFrame {
 							type=null;
 						Maintenance mN = new Maintenance(m.getId(),textC.getText(),type,textD.getText());
 						mDAO = new MaintenanceDAO();
-						if (mDAO.ajouter(mN)==1)
+						int resultat=mDAO.updateMaintenance(mN);
+						//JOptionPane.showMessageDialog(null, "Enregistr¨¦");
+						if (resultat==1)
 						{
 							JOptionPane.showMessageDialog(null, "Enregistr¨¦");
 							cardlay.previous(p);
@@ -430,14 +446,19 @@ public class InterfaceGM extends JFrame {
 		return p;
 	}
 	
-	@SuppressWarnings("rawtypes")
+
+	/**
+	 * permet d'afficher tous les maintenances
+	 * @return JPanel p
+	 */
 	public JPanel ConsultationM(){
 		JPanel p = new JPanel();
 		mList = new ArrayList<Maintenance>();
 		mDAO = new MaintenanceDAO();
 		mList.addAll(mDAO.getListeMaintenance());
 		
-		list = new JList(mList.toArray());
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		JList list = new JList( mList.toArray());
 		p.setLayout(new BorderLayout());
 		list.setVisibleRowCount(10);
 		list.setBorder(BorderFactory.createTitledBorder("Les maintenance exsistes"));
@@ -451,33 +472,64 @@ public class InterfaceGM extends JFrame {
 			}
 		});
 		p.add(new JScrollPane(list), BorderLayout.CENTER);
-		
-		
-		
 		return p;
 	}
 	
+	/**
+	 * permet de valider une maintenance
+	 * @return JPanel
+	 */
 	public JPanel validerM()
 	{
 		JPanel pV = new JPanel();
 		bOK = new JButton("Valider");
 		JLabel lab = new JLabel();
 		pV.setLayout(new BorderLayout());
-		pV.add(ConsultationM());
+		//ConsultationM
+		JPanel p = new JPanel();
+		mList = new ArrayList<Maintenance>();
+		mDAO = new MaintenanceDAO();
+		mList.addAll(mDAO.getListeMaintenance());
+		
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		JList list = new JList( mList.toArray());
+		p.setLayout(new BorderLayout());
+		list.setVisibleRowCount(10);
+		list.setBorder(BorderFactory.createTitledBorder("Les maintenance exsistes"));
+		list.addListSelectionListener(new ListSelectionListener(){
+			//quand on choisit un maintenance, il affiche l'interface de ce maintenance
+			public void valueChanged(ListSelectionEvent e) {
+				JDialog dialog = new JDialog(InterfaceGM.this,"Maintenance",true);
+				dialog.setContentPane(maintenance(mList.get(list.getSelectedIndex())));
+		        dialog.setBounds(500,500,300,300);
+		        dialog.setVisible(true);
+			}
+		});
+		p.add(new JScrollPane(list), BorderLayout.CENTER);
+		pV.add(p);
 		pV.add(lab,BorderLayout.PAGE_END);
 		pV.add(bOK, BorderLayout.PAGE_END);
 		bOK.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
 				mList.get(list.getSelectedIndex()).validerMaint();
-				lab.setText(mList.get(list.getSelectedIndex()).getId()+"valid¨¦");
+				MaintenanceDAO mDAO = new MaintenanceDAO();
+				int rs=mDAO.validerMaintenance(mList.get(list.getSelectedIndex()).getId());
+				if (rs==1)
+					lab.setText(mList.get(list.getSelectedIndex()).getId()+"valid¨¦");
+				else
+					lab.setText(mList.get(list.getSelectedIndex()).getId()+"non valid¨¦");
 				pV.revalidate();
 				pV.repaint();
+				
 		    }
 		});
 		return pV;
 	}
 	
-	@SuppressWarnings("rawtypes")
+	/**
+	 * permet d'affecter une maintenance ¨¤ un operateur choisi
+	 * @return
+	 */
 	public JPanel affecter(){
 		JPanel p = new JPanel();
 		JPanel p2 = new JPanel();
@@ -500,6 +552,7 @@ public class InterfaceGM extends JFrame {
 			System.out.print(mList.get(i).getidOp());
 		}
 		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		JList listM = new JList(mList.toArray());
 
 		listM.setVisibleRowCount(10);
@@ -508,6 +561,7 @@ public class InterfaceGM extends JFrame {
 		ArrayList<Operateur> oList = new ArrayList<Operateur>();
 		OperateurDAO oDAO = new OperateurDAO();
 		oList.addAll(oDAO.getListeOperateur());
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		JList listO =new JList(oList.toArray());
 		listO.setVisibleRowCount(10);
 		listO.setBorder(BorderFactory.createTitledBorder("Les op¨¦rateur disponible"));
@@ -521,18 +575,13 @@ public class InterfaceGM extends JFrame {
 		consulter.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
 				mList2.get(listM.getSelectedIndex()).setidOp(oList.get(listO.getSelectedIndex()).getID());
+				MaintenanceDAO mDAO = new MaintenanceDAO();
+				mDAO.updateMaintenance(mList2.get(listM.getSelectedIndex()));
 				JOptionPane.showMessageDialog(null, oList.get(listO.getSelectedIndex()).getNom()+""+oList.get(listO.getSelectedIndex()).getPrenom()+
 						"->Maintenance R¨¦f:"+mList2.get(listM.getSelectedIndex()).getId(),"R¨¦ussi",JOptionPane.INFORMATION_MESSAGE);
 		    }
 		});
 		return p2;
 	}
-	
-	
-
-
-
-
-	
 
 }

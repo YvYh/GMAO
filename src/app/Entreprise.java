@@ -1,5 +1,14 @@
 package app;
 
+/**
+ * Classe Entreprise entends Utilisateur
+ * -nom
+ * -nSiret = ent_id
+ * -adresse
+ * -ape
+ * @author CL
+ *
+ */
 public class Entreprise extends Utilisateur {
 	private String nom;
 	private int nSiret;

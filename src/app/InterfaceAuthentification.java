@@ -74,23 +74,22 @@ public class InterfaceAuthentification extends JFrame{ //implements ActionListen
 								new MenuOperateur(u.getID());
 							else if(u.getEtat()==3)
 								new MenuClient(u.getID());
+								
 						}
-						
 							
 						else//password is wrong
 						{
 							lab.setText("ID/Mot de passe incorrect");
-							//JOptionPane.showMessageDialog(this, "erreur mot de passe",
-									//"Erreur", JOptionPane.ERROR_MESSAGE);
-						}
-							
+							JOptionPane.showMessageDialog(null, "erreur mot de passe",
+									"Erreur", JOptionPane.ERROR_MESSAGE);
+						}	
 					}
 				  
 				}catch (Exception e) {
-					//JOptionPane.showMessageDialog(this,
-							//"Veuillez contrôler vos saisies", "Erreur",
-							//JOptionPane.ERROR_MESSAGE);
-					System.err.println("Veuillez contrôler vos saisies");
+					JOptionPane.showInputDialog(null,
+							"Veuillez controler vos saisies", "Erreur",
+							JOptionPane.ERROR_MESSAGE);
+					System.err.println("Veuillez controler vos saisies");
 				}
 				
 			}
@@ -98,35 +97,6 @@ public class InterfaceAuthentification extends JFrame{ //implements ActionListen
 	}
 	
 	
-	/*public void actionPerformed(ActionEvent ae) {
-		Utilisateur u = new Utilisateur("YU","Hong","abc",1,"abc"); //the return valuer of Authentiication.Connecter
-		try {
-			if (ae.getSource() == bConnecter) {
-				//u = Authentification.Connecter(textID.getText(), textMot.getText());
-				System.out.print(u.getEtat());
-				if (u.getEtat() > 0)//password is right
-				{
-					//JOptionPane.showMessageDialog(this, "Bienvenu!");
-					if (u.getEtat() == 1)//this is a director
-					{
-						new MenuResponsable(u.getNom(), u.getPrenom());//turn into director's menu
-					}
-				}
-					
-				else//password is wrong
-					JOptionPane.showMessageDialog(this, "erreur mot de passe",
-							"Erreur", JOptionPane.ERROR_MESSAGE);
-			}
-		  
-		}catch (Exception e) {
-			JOptionPane.showMessageDialog(this,
-					"Veuillez contrôler vos saisies", "Erreur",
-					JOptionPane.ERROR_MESSAGE);
-			System.err.println("Veuillez contrôler vos saisies");
-		}
-			
-	}*/
-
 	
 	public static void main(String[] args)
 	{

@@ -20,7 +20,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -311,6 +310,7 @@ public class InterfaceGO extends JFrame{
 		OperateurDAO oDAO = new OperateurDAO();
 		oList.addAll(oDAO.getListeOperateur());;
 
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		JList list = new JList(oList.toArray());
 		p.setLayout(new BorderLayout());
 		list.setVisibleRowCount(10);

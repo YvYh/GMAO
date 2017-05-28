@@ -24,7 +24,7 @@ public class UtilisateurDAO {
 		int retour = 0;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("INSERT INTO maintenance (util_nom, util_prenom, util_mdp, util_etat, util_id) VALUES (?, ?, ?, ?, ?)");
+			ps = con.prepareStatement("INSERT INTO utilisateur_uti (util_nom, util_prenom, util_mdp, util_etat, util_id) VALUES (?, ?, ?, ?, ?)");
 			ps.setString(1, utilisateur.getNom());
 			ps.setString(2, utilisateur.getPrenom());
 			ps.setString(3, utilisateur.getMotDePasse());
@@ -47,7 +47,7 @@ public class UtilisateurDAO {
 		Utilisateur retour = null;
 		try {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("SELECT * FROM utilisateur WHERE id = ?");
+			ps = con.prepareStatement("SELECT * FROM utilisateur_uti WHERE util_id = ?");
 			ps.setInt(1, idUtil);
 			rs = ps.executeQuery();
 			if (rs.next())

@@ -23,6 +23,8 @@ public class Devis {
 		idM = 0;
 		cout = 0;
 		etat = 0;
+		this.surcoutP = new ArrayList<Float>();
+		this.surcoutRM = new ArrayList<String>();
 	}
 	public int getId() {
 		return id;
@@ -55,11 +57,11 @@ public class Devis {
 		this.surcoutP = surcoutP;
 	}
 	
-	public float sizeSurcoutP() {
+	public int sizeSurcoutP() {
 		return surcoutP.size();
 	}
 	
-	public float sizeSurcoutRM() {
+	public int sizeSurcoutRM() {
 		return surcoutRM.size();
 	}
 	

@@ -34,16 +34,16 @@ public class AuthentificationDAO {
 		try {
 
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("SELECT * FROM utilisateur_uti WHERE uti_id = ?");
+			ps = con.prepareStatement("SELECT * FROM utilisateur_uti WHERE util_id = ?");
 			ps.setString(1, id);
 			rs = ps.executeQuery();
 			// passe à la première (et unique) ligne retournée
 			if (rs.next())
-				u = new Utilisateur(rs.getString("uti_nom"),
-						rs.getString("uti_prenom"),
-						rs.getString("uti_mot"),
-						rs.getInt("uti_etat"),
-						rs.getInt("uti_id"));
+				u = new Utilisateur(rs.getString("util_nom"),
+						rs.getString("util_prenom"),
+						rs.getString("util_mdp"),
+						rs.getInt("util_etat"),
+						rs.getInt("util_id"));
 			
 			if (motDePasse.equals(u.getMotDePasse())==false)
 				u=null;

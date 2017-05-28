@@ -26,10 +26,7 @@ public class MenuResponsable extends JFrame{
 	private GridLayout gridBouton;
 	int retour;
 	
-	public static void main(String[] args)
-	{
-		new MenuResponsable("YU", "Hong");
-	}
+	
 
 	
 	/**

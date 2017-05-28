@@ -3,6 +3,7 @@ package app;
 
 public class Maintenance {
 	private int idEnt;
+	private Entreprise entreprise;
 	private int id;
 	private String cMaint;
 	private String type;
@@ -14,6 +15,22 @@ public class Maintenance {
 	{
 		this.id=id;
 		this.setIdEnt(idEnt);
+		this.cMaint = nMaint;
+		this.type = type;
+		this.duree = duree;
+		if (etat==1)
+			this.etat = true;
+		else
+			this.etat = false;
+		
+		this.idOp=idOp;
+	}
+	
+	public Maintenance(int id, String nMaint, String type, String duree, int etat, int idOp, Entreprise e)
+	{
+		this.id=id;
+		this.idEnt=e.getEtat();
+		this.entreprise=e;
 		this.cMaint = nMaint;
 		this.type = type;
 		this.duree = duree;
@@ -44,6 +61,15 @@ public class Maintenance {
 		this.duree=null;
 		this.etat=false;
 		this.idOp=0;
+	}
+	
+	public void setEntreprise(Entreprise e) {
+		this.entreprise=e;
+		this.idEnt=e.getID();
+	}
+	
+	public Entreprise getEntreprise() {
+		return entreprise;
 	}
 
 	public int getId()

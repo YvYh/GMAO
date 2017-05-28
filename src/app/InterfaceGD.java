@@ -7,38 +7,55 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+/**
+ * Interface Gestion Devis
+ * -saisir un devis
+ * -modifier un devis
+ * -valider un devis
+ * @author YH
+ *
+ */
 public class InterfaceGD extends JFrame {
-	/**
-	 * interface of Gestion Devis 
-	 */
 	private static final long serialVersionUID = 1L;
+	private ArrayList<Devis> dList;
+	@SuppressWarnings("rawtypes")
+	private JList list;
 	
+	/**
+	 * menu de gestion devis
+	 */
 	public InterfaceGD(){
-		/**
-		 * construction of interface
-		 */
 		
 		JTabbedPane tabbed = new JTabbedPane();
 		tabbed.addTab("Saisir", saisirD());
 		tabbed.addTab("Modifier", chercherD());
-		//tabbed.addTab("Valider", validerD());
+		tabbed.addTab("Valider", validerD());
 		this.getContentPane().add(tabbed,BorderLayout.CENTER);
         this.setTitle("Devis");
         this.setSize(500,450);
 		this.setVisible(true);
 	}
 	
+	/**
+	 * permet d'afficher un devis
+	 * @param d devis vis¨¦
+	 */
 	public InterfaceGD(Devis d)
 	{
 		this.getContentPane().add(Devis(d));
@@ -46,47 +63,50 @@ public class InterfaceGD extends JFrame {
         this.setSize(500,450);
 		this.setVisible(true);
 	}
-	public static void main(String[] args)
-	{
-		new InterfaceGD();
-	}
+	
+	
+	/**
+	 * Permet de chercher un devis d'apr¨¨s ls r¨¦ference tap¨¦e
+	 * @return JPanel panel de chercher
+	 */
 	public Component chercherD(){
-		/**
-		 * panel pour saisir un devis
-		 */
+		
 		JPanel p = new JPanel();
 		CardLayout card = new CardLayout();
 		p.setLayout(card);
 		
 		JPanel panel = new JPanel();
-		//panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
 		JLabel labRef = new JLabel("Ref de devis:");
-		JTextField textRef = new JTextField(15);
+		JTextField textRefD = new JTextField(15);
 		JButton bCher = new JButton("Chercher");
 		panel.add(labRef);
-		panel.add(textRef);
+		panel.add(textRefD);
 		panel.add(bCher);
 		p.add(panel, "chercher");
 		card.show(p, "chercher");
 		
 		bCher.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
-				MaintenanceDAO mDAO = new MaintenanceDAO();
-				Maintenance m = mDAO.getMaintenance(Integer.parseInt( textRef.getText()));
+				DevisDAO dDAO = new DevisDAO();
+				Devis d = dDAO.getDevis((Integer.parseInt( textRefD.getText())));
+				
+				//afficher le devis trouv¨¦
 				JPanel p1 = new JPanel();
 				JLabel labRef = new JLabel("Ref:");
-				JTextField textRef = new JTextField(10);
+				JTextField textR = new JTextField(String.valueOf(d.getId()));
+				textR.setEditable(false);
+				
 				
 				JLabel labC = new JLabel("Contenu");
-				JTextArea textC = new JTextArea(m.getcMaint());
+				MaintenanceDAO mDAO = new MaintenanceDAO();
+				JTextArea textC = new JTextArea(mDAO.getMaintenance(d.getIdM()).getcMaint());
 				
 				JLabel labCout = new JLabel("Cout:");
-				JTextField textCout = new JTextField(5);
+				JTextField textCout = new JTextField(String.valueOf(d.getCout()));
 				
-				JButton bEnregistrer = new JButton();
-				
+				p1.setLayout(new BorderLayout());
 				p1.add(labRef);
-				p1.add(textRef);
+				p1.add(textR);
 				p1.add(labC);
 				p1.add(textC);
 				p1.add(labCout);
@@ -94,34 +114,31 @@ public class InterfaceGD extends JFrame {
 
 				p.add(p1,"M");
 				card.show(p, "M");
-				
-				//finish the input
-		        bEnregistrer.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent evt){
-						JLabel labResultat = new JLabel();
-						Devis d = new Devis(Integer.parseInt(textRef.getText()),m.getId(),Float.parseFloat(textCout.getText()));
-						DevisDAO dDAO = new DevisDAO();
-						dDAO.ajouter(d);
-						labResultat.setText("Enregistre!");
-				    }
-		        });
-		        
 			}
 		});
 		return p;    
 	}
 	
+	
+	/**
+	 * permet d'afficher un devis
+	 * @param d devis vis¨¦
+	 * @return JPanel p
+	 */
 	public JPanel Devis(Devis d){
 		JPanel p = new JPanel();
 		JLabel labRef = new JLabel("Ref:");
-		JTextField textRef = new JTextField(d.getId());
+		JTextField textRef = new JTextField(String.valueOf(d.getId()));
+		textRef.setEditable(false);
 		
 		JLabel labC = new JLabel("Contenu");
 		MaintenanceDAO mDAO = new MaintenanceDAO();
 		JTextArea textC = new JTextArea(mDAO.getMaintenance(d.getIdM()).getcMaint());
+		textC.setEditable(false);
 		
 		JLabel labCout = new JLabel("Cout:");
 		JTextField textCout = new JTextField(String.valueOf(d.getCout()));
+		textCout.setEditable(false);
 		
 		p.add(labRef);
 		p.add(textRef);
@@ -133,6 +150,10 @@ public class InterfaceGD extends JFrame {
 		return p;
 	}
 	
+	/**
+	 * permet de saisir un devis
+	 * @return JPanel p
+	 */
 	public JPanel saisirD()
 	{
 		JPanel p = new JPanel();
@@ -143,7 +164,7 @@ public class InterfaceGD extends JFrame {
 		MaintenanceDAO mDAO = new MaintenanceDAO();
 		ArrayList<Maintenance> list = new ArrayList<Maintenance>();
 		list.addAll(mDAO.getListeMaintenance());
-		JComboBox comboBox=new JComboBox(); 
+		JComboBox<Maintenance> comboBox=new JComboBox<Maintenance>(); 
 		for(int i =0; i<list.size();i++)
 			comboBox.addItem(list.get(i));
 
@@ -176,8 +197,59 @@ public class InterfaceGD extends JFrame {
 		return p;
 	}
 	
-
-
-
-
+	/**
+	 * permet de valider un devis
+	 * il affiche une liste de devis
+	 * @return JPanel
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public JPanel validerD(){
+		JPanel pV = new JPanel();
+		JButton bV = new JButton("Valider");
+		JLabel lab = new JLabel();
+		pV.setLayout(new BorderLayout());
+		
+		JPanel p = new JPanel();
+		dList = new ArrayList<Devis>();
+		DevisDAO dDAO = new DevisDAO();
+		dList.addAll(dDAO.getListDevis());
+		
+		list = new JList( dList.toArray());
+		p.setLayout(new BorderLayout());
+		list.setVisibleRowCount(10);
+		list.setBorder(BorderFactory.createTitledBorder("Les devis exsistes"));
+		
+		list.addListSelectionListener(new ListSelectionListener(){
+			public void valueChanged(ListSelectionEvent e) {
+				JDialog dialog = new JDialog(InterfaceGD.this,"Devis",true);
+				dialog.setContentPane(Devis(dList.get(list.getSelectedIndex())));
+		        dialog.setBounds(500,500,300,300);
+		        dialog.setVisible(true);
+			}
+		});
+		p.add(new JScrollPane(list), BorderLayout.CENTER);
+		pV.add(p);
+		pV.add(lab,BorderLayout.PAGE_END);
+		pV.add(bV, BorderLayout.PAGE_END);
+		bV.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				dList.get(list.getSelectedIndex()).validerDevis();;
+				DevisDAO dDAO = new DevisDAO();
+				int rs=dDAO.updateDevis(dList.get(list.getSelectedIndex()));
+				if (rs==1)
+					lab.setText(dList.get(list.getSelectedIndex()).getId()+"valid¨¦");
+				else
+					lab.setText(dList.get(list.getSelectedIndex()).getId()+"non valid¨¦");
+				pV.revalidate();
+				pV.repaint();
+				
+		    }
+		});
+		return pV;
+	}
+	
+	public static void test(String[] args)
+	{
+		new InterfaceGD();
+	}
 }

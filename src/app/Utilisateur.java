@@ -1,5 +1,16 @@
 package app;
-
+/**
+ * Classe Utilisateur
+ * -nom
+ * -prenom
+ * -mot de passe
+ * -etat: 1 responsable
+ *        2 operateur
+ *        3 client
+ * -id
+ * @author YH
+ *
+ */
 public class Utilisateur {
   String nom;
   String prenom;
@@ -52,6 +63,11 @@ public class Utilisateur {
  
  public void setEtat(int i){
 	 this.etat=i;
+ }
+ 
+ public void setMot(String mot)
+ {
+	 this.motDePasse=mot;
  }
  
  

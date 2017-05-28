@@ -2,7 +2,6 @@ package app;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -14,197 +13,194 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class MenuClient extends JFrame{
-
+/**
+ * Interface Menu pour client
+ * -afficher la liste de tous les devis associés à ce client
+ * @author YH
+ *
+ */
+public class MenuClient extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private JPanel panel;//basic panel
-	private JPanel pMenuMacro;//panel of macro menu
-	private JLabel labNom;//label of user name
-	private JButton boutonD;
-	private JButton boutonF;
-	private GridLayout gridBouton;
+	private EntrepriseDAO eDAO;
+	private Entreprise ent;
+	private JPanel panel;
+	private JList<Devis> list;
 	
-	
-	public MenuClient(int id){
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public MenuClient(int idEnt)
+	{
+		eDAO = new EntrepriseDAO();
+		ent = eDAO.getEntreprise(idEnt);
 		panel = new JPanel();	
-        pMenuMacro = new JPanel();
-        gridBouton = new GridLayout(4,1,0,10);
         Color couleur1 = new Color(96,120,136);
-        EntrepriseDAO eDAO = new EntrepriseDAO();
-        Entreprise e = eDAO.getEntreprise(id);
-        labNom = new JLabel("Bienvenu"+e.getNom());
-        
-        //pMenuMacro.setLayout(gridBouton);
-        pMenuMacro.setBackground(null);
-        panel.setLayout(new java.awt.GridLayout(2,1));
         panel.setBackground(couleur1);
+        panel.setLayout(new BorderLayout());
 
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setTitle("Operateur");
-        this.setSize(400,450);
+        JLabel labNom = new JLabel("Bienvenu "+ent.getNom());
+        panel.add(labNom, BorderLayout.PAGE_START);;
+        
+        
+		
+		DevisDAO dDAO = new DevisDAO();
+		ArrayList<Devis> listD = dDAO.getListDevisEnt(idEnt);
 
-		//instantiation des composants graphique
-		
-        Color couleur2 = new Color(242,242,242);
-		pMenuMacro.setLayout(gridBouton);
-        pMenuMacro.setBackground(null);
-		boutonD = new JButton("Dossier");
-		boutonD.setBackground(couleur2);
-		boutonF = new JButton("Facture");
-		boutonF.setBackground(couleur2);
-		
-		
-		pMenuMacro.add(boutonD);
-		pMenuMacro.add(boutonF);
-		
-		panel.add(labNom);
-		panel.add(pMenuMacro);
-	
-		
-		//add ActionListener to boutonGM
-		boutonD.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				try {
-					dossier(id);
-				}catch (Exception ex) 
-				{
-					JOptionPane.showMessageDialog(null,
-							"Veuillez contr么ler vos saisies", "Erreur",
-							JOptionPane.ERROR_MESSAGE);
-					System.err.println("Veuillez contr么ler vos saisies");	
-			}
-		}
-		});
-		
-		boutonF.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				try {
-					facture(id);
-				}catch (Exception ex) 
-				{
-					JOptionPane.showMessageDialog(null,
-							"Veuillez contr么ler vos saisies", "Erreur",
-							JOptionPane.ERROR_MESSAGE);
-					System.err.println("Veuillez contr么ler vos saisies");	
-			}
-		}
-		});
-		
-		
-		//allow turn off the app when we close the window
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setContentPane(panel);
-		this.setVisible(true);
-	}
-
-	
-	public JFrame dossier(int idEnt){
-		JFrame frame = new JFrame();
-		frame.setTitle("Facture");
-		frame.setSize(300, 400);
-		JList list = new JList();
+		list = new JList(listD.toArray());
 		list.setVisibleRowCount(10);
 		list.setBorder(BorderFactory.createTitledBorder("Dossiers"));
-		
-		DevisDAO dDAO = new DevisDAO();
-		MaintenanceDAO mDAO = new MaintenanceDAO();
-		ArrayList<Devis> listD = dDAO.getListDevis();
-		ArrayList<Maintenance> listM = mDAO.getListeMaintenance();
-		for(int i=0; i<listM.size(); i++)
-			if (listM.get(i).getIdEnt()==idEnt)
-				for(int j=0; j<listD.size(); i++)
-					if (listD.get(j).getIdM()==listM.get(i).getId())
-					{
-						list.add(frame, listD.get(j));
-					}
+					
 		list.addListSelectionListener(new ListSelectionListener(){
 			public void valueChanged(ListSelectionEvent e) {
-				new InterfaceGD(listD.get(list.getSelectedIndex()));
+				JDialog dialog = new JDialog(MenuClient.this,"Devis N."+listD.get(
+						list.getSelectedIndex()).getId(),true);
+				dialog.setContentPane(Devis(listD.get(list.getSelectedIndex())));
+				dialog.setBounds(500,500,300,300);
+		        dialog.setVisible(true);
 			}
 		});
 		
-		frame.setVisible(true);
-		return frame;
+		panel.add(new JScrollPane(list), BorderLayout.CENTER);
+		
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	    this.setTitle("Operateur");
+	    this.setSize(400,450);
+	    this.setContentPane(panel);
+		this.setVisible(true);
 	}
 	
-	public JFrame facture(int idEnt) {
-		JFrame frame = new JFrame();
-		frame.setTitle("Facture");
-		frame.setSize(300, 400);
-		
-		DevisDAO dDAO = new DevisDAO();
+	public JPanel Devis(Devis d){
+		JPanel p = new JPanel();
 		MaintenanceDAO mDAO = new MaintenanceDAO();
-		ArrayList<Devis> listD1 = dDAO.getListDevis();
+		UtilisateurDAO uDAO = new UtilisateurDAO();
+		
+		JLabel labRef = new JLabel("Ref:");
+		JTextField textRef = new JTextField(String.valueOf(d.getId()));
+		textRef.setEditable(false);
+		
+		JLabel labC = new JLabel("Contenu");
+		JTextArea textC = new JTextArea(mDAO.getMaintenance(d.getIdM()).getcMaint());
+		textC.setEditable(false);
+		
+		JLabel labDuree = new JLabel("Duree");
+		JTextArea textDuree = new JTextArea(mDAO.getMaintenance(d.getIdM()).getduree());
+		textDuree.setEditable(false);
+		
+		JLabel labCout = new JLabel("Cout:");
+		JTextField textCout = new JTextField(String.valueOf(d.getCout()));
+		textCout.setEditable(false);
+		
+		JLabel labOp= new JLabel("Operateur:");
+		JTextField textNOp = new JTextField("N."+mDAO.getMaintenance(d.getIdM()).getidOp());
+		JTextField textOp = new JTextField(uDAO.getUtilisateur(mDAO.getMaintenance(d.getIdM()).getidOp()).getNom()
+				+" "+uDAO.getUtilisateur(mDAO.getMaintenance(d.getIdM()).getidOp()).getPrenom());
+		textCout.setEditable(false);
+		JPanel pOp = new JPanel();
+		pOp.add(labOp);
+		pOp.add(textNOp);
+		pOp.add(textOp);
+		
+		JButton bFacture = new JButton("Facture");
+		
+		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
+		p.add(labRef);
+		p.add(textRef);
+		p.add(labC);
+		p.add(textC);
+		p.add(labDuree);
+		p.add(textDuree);
+		p.add(labCout);
+		p.add(textCout);
+		p.add(pOp);
+		p.add(bFacture);
+		
+			
+		
+		bFacture.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				JDialog dialog = new JDialog(MenuClient.this,"Devis N."+d.getId(),true);
+				dialog.setContentPane(facture(d));
+				dialog.setBounds(500,500,300,300);
+		        dialog.setVisible(true);
+				
+			}
+			
+		});
+		return p;
+	}
+	
+	public JPanel facture(Devis d){
+		panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		MaintenanceDAO mDAO = new MaintenanceDAO();
+		Maintenance m = new Maintenance();
 		ArrayList<Maintenance> listM = mDAO.getListeMaintenance();
 		for(int i=0; i<listM.size(); i++)
-			if (listM.get(i).getIdEnt()==idEnt)
-				for(int j=0; j<listD1.size(); i++)
-					if (listD1.get(j).getIdM()==listM.get(i).getId())
-					{
-						JLabel labRefD = new JLabel("Id Devis:");
-						JTextField textRefD = new JTextField(String.valueOf(listM.get(i).getId()));
-						textRefD.setEditable(false);
-						
-						JLabel labCM = new JLabel("Maintenance:");
-						JTextField textCM = new JTextField(listM.get(i).getcMaint());
-						textCM.setEditable(false);
-						
-						JLabel labCout = new JLabel("Cout:");
-						JTextField textCout = new JTextField(String.valueOf(listD1.get(j).getCout()));
-						textCout.setEditable(false);
-						
-						JList listS = new JList(listD1.get(j).getSurcoutP().toArray());
-						listS.setVisibleRowCount(10);
-						listS.setBorder(BorderFactory.createTitledBorder("Surcout"));
-						JList listRM = new JList(listD1.get(j).getSurcoutRM().toArray());
-						listRM.setVisibleRowCount(10);
-						listRM.setBorder(BorderFactory.createTitledBorder("Remarque"));
-						JPanel pS = new JPanel();
-						pS.setLayout(new BorderLayout());
-						pS.add(new JScrollPane(listS), BorderLayout.WEST);
-						pS.add(new JScrollPane(listRM), BorderLayout.EAST);
-						
-						float somme=0;
-						for(int s=0; s<listD1.get(j).getSurcoutP().size();s++)
-							somme=somme+listD1.get(j).getSurcoutP().get(s);
-						JLabel labSomme = new JLabel("Somme");
-						JTextField textSomme = new JTextField(String.valueOf(somme)+"€");
-						textSomme.setEditable(false);
-						JPanel pSomme = new JPanel();
-						pSomme.add(labSomme);
-						pSomme.add(textSomme);
-						
-						frame.getContentPane().add(labRefD);
-						frame.getContentPane().add(textRefD);
-						frame.getContentPane().add(labCM);
-						frame.getContentPane().add(textCM);
-						frame.getContentPane().add(labCout);
-						frame.getContentPane().add(textCout);
-						frame.getContentPane().add(pS);
-						frame.getContentPane().add(pSomme);
-					}
-		frame.setVisible(true);
+			if (listM.get(i).getId()==d.getIdM())
+				m=listM.get(i);
 		
-		return frame;
+		JLabel labRefD = new JLabel("Id Devis:");
+		JTextField textRefD = new JTextField(String.valueOf(d.getId()));
+		textRefD.setEditable(false);
+		JPanel p1 = new JPanel();
+		p1.add(labRefD);
+		p1.add(textRefD);
+		panel.add(p1);
+		
+		JLabel labCM = new JLabel("Maintenance:");
+		JTextField textCM = new JTextField(m.getcMaint());
+		textCM.setEditable(false);
+		JPanel p2 = new JPanel();
+		p2.add(labCM);
+		p2.add(textCM);
+		panel.add(p2);
+		
+		JLabel labCout = new JLabel("Cout:");
+		JTextField textCout = new JTextField(String.valueOf(d.getCout()));
+		textCout.setEditable(false);
+		JPanel p3 = new JPanel();
+		p3.add(labCout);
+		p3.add(textCout);
+		panel.add(p3);
+		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		JList listS = new JList(d.getSurcoutP().toArray());
+		listS.setVisibleRowCount(10);
+		listS.setBorder(BorderFactory.createTitledBorder("Surcout"));
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		JList listRM = new JList(d.getSurcoutRM().toArray());
+		listRM.setVisibleRowCount(10);
+		listRM.setBorder(BorderFactory.createTitledBorder("Remarque"));
+		JPanel pS = new JPanel();
+		pS.setLayout(new BoxLayout(pS,BoxLayout.X_AXIS));
+		pS.add(new JScrollPane(listS));
+		pS.add(new JScrollPane(listRM));
+		panel.add(pS);
+		
+		float somme=d.getCout();
+		for(int s=0; s<d.getSurcoutP().size();s++)
+			somme=somme+d.getSurcoutP().get(s);
+		JLabel labSomme = new JLabel("Somme");
+		JTextField textSomme = new JTextField(String.valueOf(somme)+"€");
+		textSomme.setEditable(false);
+		JPanel pSomme = new JPanel();
+		pSomme.add(labSomme);
+		pSomme.add(textSomme);
+		panel.add(pSomme);
+		
+		return panel;
+		
 		
 	}
-			
-	
 	
 	public static void main(String[] args)
 	{
-		new MenuClient(123);
+		new MenuClient(111);
 	}
-
-
-	
 
 }
