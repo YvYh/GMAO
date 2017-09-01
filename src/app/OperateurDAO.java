@@ -91,6 +91,48 @@ public class OperateurDAO {
 			}
 			return retour;
 			}
+	
+	public List<Operateur> getListeOperateur() {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<Operateur> retour = new ArrayList<Operateur>();
+		
+		// connexion ÃƒÂ  la base de donnÃƒÂ©es
+		try {
+	
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("SELECT * FROM operateur");
+	
+			// on exÃƒÂ©cute la requÃƒÂªte
+			rs = ps.executeQuery();
+			// on parcourt les lignes du rÃƒÂ©sultat
+			while (rs.next())
+				retour.add(new Operateur(rs.getString("util_nom"), rs.getString("util_prenom"), rs.getString("util_mdp"), rs.getInt("util_etat"), rs.getInt("util_id")));
+	
+		}catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			// fermeture du rs, du preparedStatement et de la connexion
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (Exception ignore) {
+			}
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (Exception ignore) {
+			}
+			try {
+				if (con != null)
+					con.close();
+			} catch (Exception ignore) {
+			}
+		}
+		return retour;
+	}
+
 
 
 	/**
